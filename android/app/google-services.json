@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "286135396689",
+    "firebase_url": "https://chat-radio-80a3e.firebaseio.com",
+    "project_id": "chat-radio-80a3e",
+    "storage_bucket": "chat-radio-80a3e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286135396689:android:bc0c519ba6bad651aa0b70",
+        "android_client_info": {
+          "package_name": "com.andre.radiosalvaterrafm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286135396689-kighhfd5jtsnc2o0lbf37jdv21nhqobp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andre.radiosalvaterrafm",
+            "certificate_hash": "618472d3d1095cb1638e3ee32be84ed9dcd57b65"
+          }
+        },
+        {
+          "client_id": "286135396689-7slnhs0tq5ege2kohi2k4rv01pq3o6ia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa7PYQPKxKKib4yz1TaYUoKGcdD5YCdpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286135396689-7slnhs0tq5ege2kohi2k4rv01pq3o6ia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
