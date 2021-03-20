@@ -76,9 +76,7 @@ class _ChatState extends State<Chat> {
                     ); 
                   }
                   return ListView.builder(
-                    shrinkWrap: true,
                     itemCount: doc.length,
-                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context,index){
                       return Comentarios(
                         nome: doc[index]['sendName'],
