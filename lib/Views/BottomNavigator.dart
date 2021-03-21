@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_radio/flutter_radio.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:radiosalvaterrafm/Views/HomePage/Home.dart';
 import 'Chat/Chat.dart';
@@ -13,6 +14,13 @@ class _BottomNavegarState extends State<BottomNavegar> {
   var _pages = [HomePage(), Chat()];
   int _currentIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      FlutterRadio.audioStart();
+    }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

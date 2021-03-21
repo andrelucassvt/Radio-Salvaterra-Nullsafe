@@ -113,9 +113,14 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
-                        setState((){
-                          audioPlay();            
-                        });
+                        FlutterRadio.playOrPause(url: Global.streamUrl);
+                        myInterstitial.show();
+                        Scaffold.of(context)
+                          .showSnackBar(SnackBar(
+                              duration: Duration(seconds: 7),
+                              backgroundColor: Colors.green,
+                              content: Text("Conectando ao servidor",style: TextStyle(color: Colors.white),
+                          )));
                       },
                       icon: Icon(Icons.play_arrow),
                       style: ElevatedButton.styleFrom(
@@ -137,14 +142,7 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
-                        setState(() {
-                          if(play == true){
-                            FlutterRadio.stop();
-                            play = false;
-                          }else{
-                            print('Nada');
-                          }                                                              
-                        });
+                        FlutterRadio.stop();
                       },
                       icon: Icon(Icons.pause),
                       style: ElevatedButton.styleFrom(
@@ -169,23 +167,5 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  audioPlay()async{
-    if(play == false){
-      myInterstitial.show();
-      await FlutterRadio.audioStart();
-      FlutterRadio.play(url: Global.streamUrl);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          duration: Duration(seconds: 7),
-          backgroundColor: Colors.green,
-          content: Text("Conectando ao servidor",style: TextStyle(color: Colors.white),
-      )));
-      play = true;
-    }else {
-      FlutterRadio.pause(url: Global.streamUrl);
-      play = false;
-    }
   }
 }
