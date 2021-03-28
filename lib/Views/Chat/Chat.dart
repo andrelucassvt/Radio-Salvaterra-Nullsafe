@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:radiosalvaterrafm/Views/Chat/Component/Comentarios.dart';
+import 'package:radiosalvaterrafm/Views/Chat/Widgets/Comentarios.dart';
 
 class Chat extends StatefulWidget {
   @override
@@ -122,14 +122,14 @@ class _ChatState extends State<Chat> {
                             enviarMensagem(
                               texto: mensagem.text
                             ).then((value) {
-                              ScaffoldMessenger.of(context)
+                              Scaffold.of(context)
                                 .showSnackBar(
                                   SnackBar(
                                     content: Text('Mensagem enviada'),)
                                   );
                             mensagem.clear();
                             }).catchError((_){
-                              ScaffoldMessenger.of(context)
+                              Scaffold.of(context)
                                 .showSnackBar(
                                   SnackBar(
                                     content: Text('Mensagem não enviada'),)
