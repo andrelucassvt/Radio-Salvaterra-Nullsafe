@@ -1,57 +1,80 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_radio/flutter_radio.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/Animation/WaveWidget.dart';
 import 'package:radiosalvaterrafm/Util/Global.dart';
+import 'package:radiosalvaterrafm/Util/views/atualizacao.dart';
+import 'package:radiosalvaterrafm/Util/controller/controller.dart';
 import 'package:radiosalvaterrafm/Views/Info/info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool play = false;
-  final InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: 'ca-app-pub-3652623512305285/7857500684',
-    request: AdRequest(),
-    listener: AdListener(),
+  InterstitialAd _interstitialAd;
+  bool _interstitialReady = false;
+  static final AdRequest request = AdRequest(
+    testDevices: <String>[],
+    keywords: <String>['flutterio', 'beautiful apps'],
+    contentUrl: 'https://flutter.io',
+    nonPersonalizedAds: true,
   );
-  final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3652623512305285/6823768348',
-    size: AdSize.banner,
-    request: AdRequest(),
-    listener: AdListener(),
-  );
-  final AdListener listener = AdListener(
-    // Called when an ad is successfully received.
-    onAdLoaded: (Ad ad) => print('Ad loaded.'),
-    // Called when an ad request failed.
-    onAdFailedToLoad: (Ad ad, LoadAdError error) {
-      ad.dispose();
-      print('Ad failed to load: $error');
-    },
-    // Called when an ad opens an overlay that covers the screen.
-    onAdOpened: (Ad ad) => print('Ad opened.'),
-    // Called when an ad removes an overlay that covers the screen.
-    onAdClosed: (Ad ad) => print('Ad closed.'),
-    // Called when an ad is in the process of leaving the application.
-    onApplicationExit: (Ad ad) => print('Left application.'),
-  );
-
+  void createInterstitialAd() {
+    _interstitialAd ??= InterstitialAd(
+      adUnitId: 'ca-app-pub-3652623512305285/7857500684',
+      request: request,
+      listener: AdListener(
+        onAdLoaded: (Ad ad) {
+          print('${ad.runtimeType} loaded.');
+          _interstitialReady = true;
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print('${ad.runtimeType} failed to load: $error.');
+          ad.dispose();
+          _interstitialAd = null;
+          createInterstitialAd();
+        },
+        onAdOpened: (Ad ad) => print('${ad.runtimeType} onAdOpened.'),
+        onAdClosed: (Ad ad) {
+          print('${ad.runtimeType} closed.');
+          ad.dispose();
+          createInterstitialAd();
+        },
+        onApplicationExit: (Ad ad) =>
+            print('${ad.runtimeType} onApplicationExit.'),
+      ),
+    )..load();
+  }
+  final _controller = Controller();
   @override
     void initState() {
       // TODO: implement initState
       super.initState();
-      myInterstitial.load();
-      myBanner.load();
-      adWidget = AdWidget(ad: myBanner);
+      _pegarAtt();
+      MobileAds.instance.initialize().then((InitializationStatus status) {
+        print('Initialization done: ${status.adapterStatuses}');
+        MobileAds.instance
+            .updateRequestConfiguration(RequestConfiguration(
+                tagForChildDirectedTreatment:
+                    TagForChildDirectedTreatment.unspecified))
+            .then((void value) {
+          createInterstitialAd();
+        });
+      });
     }
-  AdWidget adWidget;  
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -95,14 +118,6 @@ class _HomePageState extends State<HomePage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              child: adWidget,
-              width: 500,
-              height: 500,
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 100),
               child: Row(
@@ -113,14 +128,18 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
-                        FlutterRadio.playOrPause(url: Global.streamUrl);
-                        myInterstitial.show();
-                        Scaffold.of(context)
-                          .showSnackBar(SnackBar(
-                              duration: Duration(seconds: 7),
-                              backgroundColor: Colors.green,
-                              content: Text("Conectando ao servidor",style: TextStyle(color: Colors.white),
-                          )));
+                        _controller.playMusic();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 10),
+                            content: Text('Conectando ao servidor'),
+                          )
+                        );
+                        if (!_interstitialReady) return;
+                        _interstitialAd.show();
+                        _interstitialReady = false;
+                        _interstitialAd = null;
                       },
                       icon: Icon(Icons.play_arrow),
                       style: ElevatedButton.styleFrom(
@@ -142,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
-                        FlutterRadio.stop();
+                        _controller.pauseMusic();
                       },
                       icon: Icon(Icons.pause),
                       style: ElevatedButton.styleFrom(
@@ -167,5 +186,19 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+  _pegarAtt()async{
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('status').doc('att').get();
+     Map<String, dynamic> data = snapshot.data();
+     String valid = data['valid'];
+     print(data['atualizar']);
+     print(valid);
+      if (data['atualizar'] != Global.atualizacao){
+        Future.delayed(Duration.zero,(){
+          showCupertinoModalPopup(
+            context: context,
+            builder: (x)=>AtualizarApp(valid));
+        });
+      }
   }
 }

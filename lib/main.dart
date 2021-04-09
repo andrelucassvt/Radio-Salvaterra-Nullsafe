@@ -8,6 +8,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();

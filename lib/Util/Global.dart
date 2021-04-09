@@ -6,4 +6,6 @@ class Global {
   static const Color mediumBlue = const Color(0xff4A64FE);
   static const streamUrl =
       "https://s10.maxcast.com.br:8234/live";
+
+  static const String atualizacao = '1';
 }

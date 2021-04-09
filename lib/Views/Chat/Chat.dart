@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:radiosalvaterrafm/Views/Chat/Widgets/Comentarios.dart';
 
@@ -12,8 +13,9 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+  
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  User currentUser; 
+  User currentUser;
   TextEditingController mensagem = TextEditingController();
   GlobalKey<FormState> validacao = GlobalKey<FormState>();
   @override
@@ -45,7 +47,7 @@ class _ChatState extends State<Chat> {
           children: [
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('Mensagens2').orderBy("Time",descending: false).snapshots(),
+                stream: FirebaseFirestore.instance.collection('Mensagens2').orderBy('Time',descending: true).snapshots(),
                 builder: (context,snapshot){
                   
                   if (snapshot.hasError) {
@@ -77,6 +79,8 @@ class _ChatState extends State<Chat> {
                   }
                   return ListView.builder(
                     itemCount: doc.length,
+                    reverse: true,
+                    shrinkWrap: true,
                     itemBuilder: (context,index){
                       return Comentarios(
                         nome: doc[index]['sendName'],
@@ -122,14 +126,14 @@ class _ChatState extends State<Chat> {
                             enviarMensagem(
                               texto: mensagem.text
                             ).then((value) {
-                              Scaffold.of(context)
+                              ScaffoldMessenger.of(context)
                                 .showSnackBar(
                                   SnackBar(
                                     content: Text('Mensagem enviada'),)
                                   );
                             mensagem.clear();
                             }).catchError((_){
-                              Scaffold.of(context)
+                              ScaffoldMessenger.of(context)
                                 .showSnackBar(
                                   SnackBar(
                                     content: Text('Mensagem não enviada'),)
@@ -157,14 +161,16 @@ class _ChatState extends State<Chat> {
 
   Future enviarMensagem({String texto})async{
     Map<String, dynamic> data = {
-      "uid" : currentUser.uid,
-      "sendName": currentUser.displayName,
+      "uid" : currentUser?.uid,
+      "sendName": currentUser?.displayName,
       "Texto": texto,
-      "sendPhotourl": currentUser.photoURL,
+      "sendPhotourl": currentUser?.photoURL,
       "Time": FieldValue.serverTimestamp()
     };
     return await FirebaseFirestore.instance.collection('Mensagens2').add(data);
   }
+
+  
   Future<User> _getUser() async {
       if (currentUser != null) return currentUser;
 
@@ -189,4 +195,6 @@ class _ChatState extends State<Chat> {
         return null;
       }
    }
+
+
 }
