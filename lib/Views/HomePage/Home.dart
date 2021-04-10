@@ -128,6 +128,7 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
+                        _interstitialAd.show();
                         _controller.playMusic();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -136,10 +137,6 @@ class _HomePageState extends State<HomePage> {
                             content: Text('Conectando ao servidor'),
                           )
                         );
-                        if (!_interstitialReady) return;
-                        _interstitialAd.show();
-                        _interstitialReady = false;
-                        _interstitialAd = null;
                       },
                       icon: Icon(Icons.play_arrow),
                       style: ElevatedButton.styleFrom(
@@ -190,14 +187,11 @@ class _HomePageState extends State<HomePage> {
   _pegarAtt()async{
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('status').doc('att').get();
      Map<String, dynamic> data = snapshot.data();
-     String valid = data['valid'];
-     print(data['atualizar']);
-     print(valid);
       if (data['atualizar'] != Global.atualizacao){
         Future.delayed(Duration.zero,(){
           showCupertinoModalPopup(
             context: context,
-            builder: (x)=>AtualizarApp(valid));
+            builder: (x)=>AtualizarApp());
         });
       }
   }

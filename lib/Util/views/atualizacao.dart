@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AtualizarApp extends StatefulWidget {
-  final String valid;
-  AtualizarApp(this.valid);
   @override
   _AtualizarAppState createState() => _AtualizarAppState();
 }
@@ -44,26 +42,6 @@ class _AtualizarAppState extends State<AtualizarApp> {
                   fontWeight: FontWeight.bold
                 ),
               ),
-
-             if(widget.valid == 'sim') Container(
-                    height: 50,
-                    width: 200,
-                    margin: EdgeInsets.only(top: 20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.green
-                      ),
-                      child: Text(
-                        'Atualizar',
-                        style: TextStyle(
-                          fontSize: size
-                        ),
-                        ),
-                      onPressed: (){
-                        abrirUrl();
-                      }
-                    ),
-                  ),
 
           ],
         ),
