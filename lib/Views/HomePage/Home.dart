@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   InterstitialAd _interstitialAd;
   bool _interstitialReady = false;
+
   static final AdRequest request = AdRequest(
     testDevices: <String>[],
     keywords: <String>['flutterio', 'beautiful apps'],
@@ -28,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     nonPersonalizedAds: true,
   );
   void createInterstitialAd() {
-    _interstitialAd ??= InterstitialAd(
+    _interstitialAd = InterstitialAd(
       adUnitId: 'ca-app-pub-3652623512305285/7857500684',
       request: request,
       listener: AdListener(

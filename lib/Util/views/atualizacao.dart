@@ -29,6 +29,7 @@ class _AtualizarAppState extends State<AtualizarApp> {
           children: [
               Text(
                 'Há uma nova atualização disponível',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: size,
                   fontWeight: FontWeight.bold
@@ -37,11 +38,24 @@ class _AtualizarAppState extends State<AtualizarApp> {
 
               Text(
                 'Abra a Google Play e atualize',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: size,
                   fontWeight: FontWeight.bold
                 ),
               ),
+
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                width: 150,
+                height: 50,
+                child: ElevatedButton(
+                  child: Text('Atualizar'),
+                  onPressed: (){
+                    abrirUrl();
+                  },
+                ),
+              )
 
           ],
         ),
