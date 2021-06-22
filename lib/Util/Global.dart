@@ -7,5 +7,5 @@ class Global {
   static const streamUrl =
       "https://s10.maxcast.com.br:8234/live";
 
-  static const String atualizacao = '3';
+  static const String atualizacao = '4';
 }

@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 class Horarios extends StatefulWidget {
   @override
   _HorariosState createState() => _HorariosState();
 }
 
 class _HorariosState extends State<Horarios> {
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-3652623512305285/6823768348',
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: AdListener(),
+  );
+  AdWidget adWidget;
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      myBanner.load();
+      adWidget = AdWidget(ad: myBanner);
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +35,12 @@ class _HorariosState extends State<Horarios> {
 
       body: ListView(
         children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: adWidget,
+            width: myBanner.size.width.toDouble(),
+            height: myBanner.size.height.toDouble(),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(child: Text('Segunda a Sexta',style: TextStyle(fontSize: 20),)),

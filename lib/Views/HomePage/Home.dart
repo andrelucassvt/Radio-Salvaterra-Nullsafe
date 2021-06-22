@@ -129,9 +129,9 @@ class _HomePageState extends State<HomePage> {
                     height: 60,
                     width: 150,
                     child: ElevatedButton.icon(
-                      onPressed: (){
-                        _interstitialAd.show();
+                      onPressed: () async {
                         _controller.playMusic();
+                        await _interstitialAd.show();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.green,
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                             fontSize: 20
                           ),
-                          ),
+                        ),
                       ),
                     )
                   ),
