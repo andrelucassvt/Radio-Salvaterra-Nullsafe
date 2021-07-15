@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:radiosalvaterrafm/Util/Global.dart';
 import 'package:radiosalvaterrafm/Views/HomePage/Home.dart';
-import 'package:radiosalvaterrafm/Util/controller/controller.dart';
+import 'package:radiosalvaterrafm/Util/controller/audio_controller.dart';
 import 'Chat/Chat.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 class BottomNavegar extends StatefulWidget {
@@ -25,7 +25,7 @@ class _BottomNavegarState extends State<BottomNavegar> with TickerProviderStateM
   ];
   TabController _tabController;
   int _currentIndex = 0;
-  Controller _controller = Controller();
+  AudioController _controller = AudioController();
   @override
     void initState() {
       // TODO: implement initState

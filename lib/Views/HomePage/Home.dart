@@ -9,7 +9,8 @@ import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/Animation/WaveWidget.dart';
 import 'package:radiosalvaterrafm/Util/Global.dart';
 import 'package:radiosalvaterrafm/Util/views/atualizacao.dart';
-import 'package:radiosalvaterrafm/Util/controller/controller.dart';
+import 'package:radiosalvaterrafm/Util/controller/audio_controller.dart';
+import 'package:radiosalvaterrafm/Views/HomePage/controller/admob_controller.dart';
 import 'package:radiosalvaterrafm/Views/Info/info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,61 +21,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  InterstitialAd _interstitialAd;
-  bool _interstitialReady = false;
+  AudioController _controller = AudioController();
+  AdmobControllerBase _admobControllerBase = AdmobControllerBase();
 
-  static final AdRequest request = AdRequest(
-    testDevices: <String>[],
-    keywords: <String>['flutterio', 'beautiful apps'],
-    contentUrl: 'https://flutter.io',
-    nonPersonalizedAds: true,
-  );
-  void createInterstitialAd() {
-    _interstitialAd = InterstitialAd(
-      adUnitId: 'ca-app-pub-3652623512305285/7857500684',
-      request: request,
-      listener: AdListener(
-        onAdLoaded: (Ad ad) {
-          print('${ad.runtimeType} loaded.');
-          _interstitialReady = true;
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('${ad.runtimeType} failed to load: $error.');
-          ad.dispose();
-          _interstitialAd = null;
-          createInterstitialAd();
-        },
-        onAdOpened: (Ad ad) => print('${ad.runtimeType} onAdOpened.'),
-        onAdClosed: (Ad ad) {
-          print('${ad.runtimeType} closed.');
-          ad.dispose();
-          createInterstitialAd();
-        },
-        onApplicationExit: (Ad ad) =>
-            print('${ad.runtimeType} onApplicationExit.'),
-      ),
-    )..load();
-  }
-  final _controller = Controller();
   @override
     void initState() {
       // TODO: implement initState
       super.initState();
       _pegarAtt();
-      MobileAds.instance.initialize().then((InitializationStatus status) {
-        print('Initialization done: ${status.adapterStatuses}');
-        MobileAds.instance
-            .updateRequestConfiguration(RequestConfiguration(
-                tagForChildDirectedTreatment:
-                    TagForChildDirectedTreatment.unspecified))
-            .then((void value) {
-          createInterstitialAd();
-        });
+      MobileAds.instance.initialize().then((value) {
+        _admobControllerBase.createInterstitialAd();
       });
     }
   @override
   void dispose() {
-    _interstitialAd.dispose();
+    _admobControllerBase.interstitialAd.dispose();
     super.dispose();
   }
   @override
@@ -131,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     child: ElevatedButton.icon(
                       onPressed: () async {
                         _controller.playMusic();
-                        await _interstitialAd.show();
+                        await _admobControllerBase.interstitialAd.show();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.green,

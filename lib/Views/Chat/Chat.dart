@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:radiosalvaterrafm/Views/Chat/Widgets/Comentarios.dart';
+import 'package:share/share.dart';
 
 class Chat extends StatefulWidget {
   @override
@@ -40,6 +41,14 @@ class _ChatState extends State<Chat> {
           ),
         centerTitle: true,
         backgroundColor: Colors.red,
+        actions: [
+          IconButton(
+            onPressed: (){
+              Share.share('''Baixe agora o aplicativo da Salvaterra FM.\nhttps://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm''');
+            }, 
+            icon: Icon(Icons.share)
+          )
+        ],
       ),
       body: Form(
         key: validacao,

@@ -1,11 +1,11 @@
 import 'package:flutter_radio/flutter_radio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/Util/Global.dart';
-part 'controller.g.dart';
+part 'audio_controller.g.dart';
 
-class Controller = ControllerBase with _$Controller; 
+class AudioController = _AudioController with _$AudioController; 
 
-abstract class ControllerBase with Store{
+abstract class _AudioController with Store{
   
 
   @action
