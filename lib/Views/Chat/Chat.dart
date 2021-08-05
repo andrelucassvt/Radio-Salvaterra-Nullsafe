@@ -20,17 +20,16 @@ class _ChatState extends State<Chat> {
   TextEditingController mensagem = TextEditingController();
   GlobalKey<FormState> validacao = GlobalKey<FormState>();
   @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      FirebaseAuth.instance
-        .authStateChanges()
-        .listen((user) {
-          setState(() {
-            currentUser = user;            
-          });
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance
+      .authStateChanges()
+      .listen((user) {
+        setState(() {
+          currentUser = user;            
         });
-    }
+      });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
