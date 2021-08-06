@@ -4,7 +4,11 @@ class Comentarios extends StatelessWidget {
   String nome;
   String perfil;
   String texto;
-  Comentarios({this.nome,this.perfil,this.texto});
+  Comentarios(
+    {required this.nome,
+    required this.perfil,
+    required this.texto}
+  );
   @override
   Widget build(BuildContext context) {
     return Container(

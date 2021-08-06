@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-class Horarios extends StatefulWidget {
+class InfoPage extends StatefulWidget {
   @override
-  _HorariosState createState() => _HorariosState();
+  _InfoPageState createState() => _InfoPageState();
 }
 
-class _HorariosState extends State<Horarios> {
+class _InfoPageState extends State<InfoPage> {
   final BannerAd myBanner = BannerAd(
     adUnitId: 'ca-app-pub-3652623512305285/6823768348',
     size: AdSize.banner,
     request: AdRequest(),
-    listener: AdListener(),
+    listener: BannerAdListener(),
   );
-  AdWidget adWidget;
+  AdWidget? adWidget;
   @override
     void initState() {
       // TODO: implement initState

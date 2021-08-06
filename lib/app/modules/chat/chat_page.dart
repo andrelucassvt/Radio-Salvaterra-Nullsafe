@@ -1,22 +1,22 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:radiosalvaterrafm/Views/Chat/Widgets/Comentarios.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/chat_store.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/widgets/comentarios.dart';
 import 'package:share/share.dart';
 
-class Chat extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   @override
-  _ChatState createState() => _ChatState();
+  _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatPageState extends ModularState<ChatPage,ChatStore> {
   
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  User currentUser;
+  User? currentUser;
   TextEditingController mensagem = TextEditingController();
   GlobalKey<FormState> validacao = GlobalKey<FormState>();
   @override
@@ -73,7 +73,7 @@ class _ChatState extends State<Chat> {
                       child: CircularProgressIndicator(),
                     );
                   } 
-                  List<DocumentSnapshot> doc = snapshot.data.docs.toList();
+                  List<DocumentSnapshot> doc = snapshot.data!.docs.toList();
                   if(doc.isEmpty){
                     return Center(
                       child: AutoSizeText(
@@ -115,7 +115,7 @@ class _ChatState extends State<Chat> {
                           hintText: 'Enviar uma mensagem',
                         ),
                         validator: (value){
-                          if(value.isEmpty){
+                          if(value!.isEmpty){
                             return "Campo vazio!!";
                           }
                         },
@@ -129,7 +129,7 @@ class _ChatState extends State<Chat> {
                             _getUser();
                           
                           //Valida se o usuario escreveu algo ou não
-                          } else if(validacao.currentState.validate()){
+                          } else if(validacao.currentState!.validate()){
 
                             enviarMensagem(
                               texto: mensagem.text
@@ -167,7 +167,7 @@ class _ChatState extends State<Chat> {
 
 
 
-  Future enviarMensagem({String texto})async{
+  Future enviarMensagem({required String texto})async{
     Map<String, dynamic> data = {
       "uid" : currentUser?.uid,
       "sendName": currentUser?.displayName,
@@ -179,14 +179,12 @@ class _ChatState extends State<Chat> {
   }
 
   
-  Future<User> _getUser() async {
+  Future<User?> _getUser() async {
       if (currentUser != null) return currentUser;
 
       try {
-        final GoogleSignInAccount googleSignInAccount = (await googleSignIn
-            .signIn());
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount
-            .authentication;
+        final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           idToken: googleSignInAuthentication.idToken,
@@ -196,7 +194,7 @@ class _ChatState extends State<Chat> {
         var authResult = await FirebaseAuth.instance
             .signInWithCredential(credential);
 
-        final User user = authResult.user;
+        final User user = authResult.user!;
 
         return user;
       } catch (error) {

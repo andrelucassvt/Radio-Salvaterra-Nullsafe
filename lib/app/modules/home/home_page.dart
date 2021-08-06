@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:mobx/mobx.dart';
-import 'package:radiosalvaterrafm/Animation/WaveWidget.dart';
-import 'package:radiosalvaterrafm/Util/Global.dart';
-import 'package:radiosalvaterrafm/Util/views/atualizacao.dart';
-import 'package:radiosalvaterrafm/Util/controller/audio_controller.dart';
-import 'package:radiosalvaterrafm/Views/HomePage/controller/admob_controller.dart';
-import 'package:radiosalvaterrafm/Views/Info/info.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:radiosalvaterrafm/app/modules/home/animation/wave_widget.dart';
+import 'package:radiosalvaterrafm/app/modules/home/home_module.dart';
+import 'package:radiosalvaterrafm/app/modules/home/home_store.dart';
+import 'package:radiosalvaterrafm/app/modules/info/info_module.dart';
+import 'package:radiosalvaterrafm/app/modules/info/info_page.dart';
+import 'package:radiosalvaterrafm/app/shared/global.dart';
+import 'package:radiosalvaterrafm/app/shared/views/atualizar_app.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -20,22 +20,18 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  AudioController _controller = AudioController();
-  AdmobControllerBase _admobControllerBase = AdmobControllerBase();
-
+class _HomePageState extends ModularState<HomePage,HomeStore> {
   @override
     void initState() {
-      // TODO: implement initState
       super.initState();
       _pegarAtt();
       MobileAds.instance.initialize().then((value) {
-        _admobControllerBase.createInterstitialAd();
+        controller.createInterstitialAd();
       });
     }
   @override
   void dispose() {
-    _admobControllerBase.interstitialAd.dispose();
+    controller.interstitialAd?.dispose();
     super.dispose();
   }
   @override
@@ -47,7 +43,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: (){
           showCupertinoModalPopup(
             context: context,
-            builder: (x)=>Horarios());
+            builder: (x) => InfoModule());
         },
         backgroundColor: Colors.green,
         child: Icon(Icons.info),
@@ -91,8 +87,8 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        _controller.playMusic();
-                        await _admobControllerBase.interstitialAd.show();
+                        controller.handlePressed();
+                        await controller.interstitialAd?.show();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.green,
@@ -121,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                     width: 150,
                     child: ElevatedButton.icon(
                       onPressed: (){
-                        _controller.pauseMusic();
+                        controller.handlePressed();
                       },
                       icon: Icon(Icons.pause),
                       style: ElevatedButton.styleFrom(
@@ -148,8 +144,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
   _pegarAtt()async{
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('status').doc('att').get();
-     Map<String, dynamic> data = snapshot.data();
+    DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection('status').doc('att').get();
+     Map<String, dynamic> data = snapshot.data()!;
       if (data['atualizar'] != Global.atualizacao){
         Future.delayed(Duration.zero,(){
           showCupertinoModalPopup(

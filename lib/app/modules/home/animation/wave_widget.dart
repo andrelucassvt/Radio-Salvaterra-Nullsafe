@@ -4,7 +4,7 @@ import 'dart:math' as Math;
 
 class ClipperWidget extends CustomClipper<Path> {
   final List<Offset> waveList;
-  ClipperWidget({this.waveList});
+  ClipperWidget({required this.waveList});
 
   @override
   getClip(Size size) {
@@ -28,9 +28,9 @@ class WaveWidget extends StatefulWidget {
   final Color color;
 
   WaveWidget({
-    this.size,
-    this.yOffset,
-    this.color,
+    required this.size,
+    required this.yOffset,
+    required this.color,
   });
 
   @override
@@ -38,7 +38,7 @@ class WaveWidget extends StatefulWidget {
 }
 
 class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
-  AnimationController animationController;
+  AnimationController? animationController;
   List<Offset> wavePoints = [];
 
   @override
@@ -50,8 +50,8 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           ..addListener(() {
             wavePoints.clear();
 
-            final double waveSpeed = animationController.value * 1080;
-            final double fullSphere = animationController.value * Math.pi * 2;
+            final double waveSpeed = animationController!.value * 1080;
+            final double fullSphere = animationController!.value * Math.pi * 2;
             final double normalizer = Math.cos(fullSphere);
             final double waveWidth = Math.pi / 270;
             final double waveHeight = 20.0;
@@ -67,19 +67,19 @@ class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
             }
           });
 
-    animationController.repeat();
+    animationController!.repeat();
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    animationController!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animationController!,
       builder: (context, _) {
         return ClipPath(
           clipper: ClipperWidget(
