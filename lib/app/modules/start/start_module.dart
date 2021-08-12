@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/chat_store.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/service/chat_service.dart';
 import 'package:radiosalvaterrafm/app/modules/home/home_store.dart';
 import 'package:radiosalvaterrafm/app/modules/start/start_Page.dart';
 import 'package:flutter_modular/flutter_modular.dart';

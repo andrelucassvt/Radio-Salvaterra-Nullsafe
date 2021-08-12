@@ -38,108 +38,111 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          showCupertinoModalPopup(
-            context: context,
-            builder: (x) => InfoModule());
-        },
-        backgroundColor: Colors.green,
-        child: Icon(Icons.info),
-        ),
-      body: Stack(
-        children: [
-            Container(
-              height: size.height - 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.red,
-                    Colors.yellow,
-                  ]
-                )
-              ),
-            ),
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOutQuad,
-              top: keyboardOpen ? -size.height / 3.7 : 0.0,
-              child: WaveWidget(
-                size: size,
-                yOffset: size.height / 2.2,
-                color: Global.white,
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: Image.asset('Imagens/Salvaterra.png'),
+    return WillPopScope(
+      onWillPop: () async => false, 
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            showCupertinoModalPopup(
+              context: context,
+              builder: (x) => InfoModule());
+          },
+          backgroundColor: Colors.green,
+          child: Icon(Icons.info),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    height: 60,
-                    width: 150,
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        controller.handlePressed();
-                        await controller.interstitialAd?.show();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.green,
-                            duration: Duration(seconds: 10),
-                            content: Text('Conectando ao servidor'),
-                          )
-                        );
-                      },
-                      icon: Icon(Icons.play_arrow),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blue
-                      ),
-                      label: Flexible(
-                        child: AutoSizeText(
-                          'Reproduzir',
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 20
+        body: Stack(
+          children: [
+              Container(
+                height: size.height - 200,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.red,
+                      Colors.yellow,
+                    ]
+                  )
+                ),
+              ),
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeOutQuad,
+                top: keyboardOpen ? -size.height / 3.7 : 0.0,
+                child: WaveWidget(
+                  size: size,
+                  yOffset: size.height / 2.2,
+                  color: Global.white,
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 25),
+              child: Image.asset('Imagens/Salvaterra.png'),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 150,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          controller.handlePressed();
+                          await controller.interstitialAd?.show();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 10),
+                              content: Text('Conectando ao servidor'),
+                            )
+                          );
+                        },
+                        icon: Icon(Icons.play_arrow),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue
+                        ),
+                        label: Flexible(
+                          child: AutoSizeText(
+                            'Reproduzir',
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 20
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ),
-                  Container(
-                    height: 60,
-                    width: 150,
-                    child: ElevatedButton.icon(
-                      onPressed: (){
-                        controller.handlePressed();
-                      },
-                      icon: Icon(Icons.pause),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red
-                      ),
-                      label: Flexible(
-                        child: AutoSizeText(
-                          'Parar',
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 20
-                          ),
-                          ),
-                      ),
-                    )
-                  ),
-
-                ],
+                      )
+                    ),
+                    Container(
+                      height: 60,
+                      width: 150,
+                      child: ElevatedButton.icon(
+                        onPressed: (){
+                          controller.handlePressed();
+                        },
+                        icon: Icon(Icons.pause),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red
+                        ),
+                        label: Flexible(
+                          child: AutoSizeText(
+                            'Parar',
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 20
+                            ),
+                            ),
+                        ),
+                      )
+                    ),
+    
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
