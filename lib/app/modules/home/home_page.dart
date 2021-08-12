@@ -22,13 +22,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage,HomeStore> {
   @override
-    void initState() {
-      super.initState();
-      _pegarAtt();
-      MobileAds.instance.initialize().then((value) {
-        controller.createInterstitialAd();
-      });
-    }
+  void initState() {
+    super.initState();
+    _pegarAtt();
+    MobileAds.instance.initialize().then((value) {
+      controller.createInterstitialAd();
+    });
+  }
   @override
   void dispose() {
     controller.interstitialAd?.dispose();
@@ -56,7 +56,7 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
                 gradient: LinearGradient(
                   colors: [
                     Colors.red,
-                    Colors.amber
+                    Colors.yellow,
                   ]
                 )
               ),

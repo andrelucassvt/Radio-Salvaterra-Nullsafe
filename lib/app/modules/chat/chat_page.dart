@@ -14,21 +14,34 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends ModularState<ChatPage,ChatStore> {
-  
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  User? currentUser;
-  TextEditingController mensagem = TextEditingController();
-  GlobalKey<FormState> validacao = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance
       .authStateChanges()
       .listen((user) {
-        setState(() {
-          currentUser = user;            
-        });
-      });
+        controller.setUser(user);
+      }
+    );
+  }
+  enviarMensagem({required String texto, required User currentUser}) async {
+    try {
+      await controller.enviarMensagem(texto: texto, currentUser: currentUser);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mensagem enviada'),
+        )
+      );
+      controller.mensagem.clear();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mensagem não enviada'),
+        )
+      );
+      controller.mensagem.clear();  
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -50,7 +63,7 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
         ],
       ),
       body: Form(
-        key: validacao,
+        key:controller.validacao,
         child: Column(
           children: [
             Expanded(
@@ -107,10 +120,10 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
                       child: TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
-                        controller: mensagem,
+                        controller: controller.mensagem,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           hintText: 'Enviar uma mensagem',
                         ),
@@ -119,38 +132,30 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
                             return "Campo vazio!!";
                           }
                         },
-                      )),
+                      )
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
                     //Botao enviar
-                    IconButton(
-                      icon: Icon(Icons.send),
-                        onPressed: (){
-                          //Valida se o usuario está logado ou não
-                          if (currentUser == null) {
-                            _getUser();
-                          
-                          //Valida se o usuario escreveu algo ou não
-                          } else if(validacao.currentState!.validate()){
-
-                            enviarMensagem(
-                              texto: mensagem.text
-                            ).then((value) {
-                              ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                                  SnackBar(
-                                    content: Text('Mensagem enviada'),)
-                                  );
-                            mensagem.clear();
-                            }).catchError((_){
-                              ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                                  SnackBar(
-                                    content: Text('Mensagem não enviada'),)
-                                  );
-                              mensagem.clear();   
-                            });
-
-                          }
-                        },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.send),
+                          onPressed: (){
+                            if (controller.currentUser == null) {
+                              controller.getUser(context);
+                            } else if (controller.validacao.currentState!.validate()) {
+                              enviarMensagem(
+                                texto: controller.mensagem.text, 
+                                currentUser: controller.currentUser!
+                              );
+                            }
+                          },
+                      ),
                     )
                   ],
                 ),
@@ -160,47 +165,4 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
       ),
     );
   }
-
-
-
-
-
-
-
-  Future enviarMensagem({required String texto})async{
-    Map<String, dynamic> data = {
-      "uid" : currentUser?.uid,
-      "sendName": currentUser?.displayName,
-      "Texto": texto,
-      "sendPhotourl": currentUser?.photoURL,
-      "Time": FieldValue.serverTimestamp()
-    };
-    return await FirebaseFirestore.instance.collection('Mensagens2').add(data);
-  }
-
-  
-  Future<User?> _getUser() async {
-      if (currentUser != null) return currentUser;
-
-      try {
-        final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-
-        var authResult = await FirebaseAuth.instance
-            .signInWithCredential(credential);
-
-        final User user = authResult.user!;
-
-        return user;
-      } catch (error) {
-        return null;
-      }
-   }
-
-
 }
