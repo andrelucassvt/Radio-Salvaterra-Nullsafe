@@ -1,34 +1,47 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:radiosalvaterrafm/Views/Chat/Widgets/Comentarios.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/chat_store.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/widgets/comentarios.dart';
 import 'package:share/share.dart';
 
-class Chat extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   @override
-  _ChatState createState() => _ChatState();
+  _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatState extends State<Chat> {
-  
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  User currentUser;
-  TextEditingController mensagem = TextEditingController();
-  GlobalKey<FormState> validacao = GlobalKey<FormState>();
+class _ChatPageState extends ModularState<ChatPage,ChatStore> {
+
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance
       .authStateChanges()
       .listen((user) {
-        setState(() {
-          currentUser = user;            
-        });
-      });
+        controller.setUser(user);
+      }
+    );
+  }
+  enviarMensagem({required String texto, required User currentUser}) async {
+    try {
+      await controller.enviarMensagem(texto: texto, currentUser: currentUser);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mensagem enviada'),
+        )
+      );
+      controller.mensagem.clear();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mensagem não enviada'),
+        )
+      );
+      controller.mensagem.clear();  
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -50,7 +63,7 @@ class _ChatState extends State<Chat> {
         ],
       ),
       body: Form(
-        key: validacao,
+        key:controller.validacao,
         child: Column(
           children: [
             Expanded(
@@ -73,7 +86,7 @@ class _ChatState extends State<Chat> {
                       child: CircularProgressIndicator(),
                     );
                   } 
-                  List<DocumentSnapshot> doc = snapshot.data.docs.toList();
+                  List<DocumentSnapshot> doc = snapshot.data!.docs.toList();
                   if(doc.isEmpty){
                     return Center(
                       child: AutoSizeText(
@@ -107,50 +120,42 @@ class _ChatState extends State<Chat> {
                       child: TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
-                        controller: mensagem,
+                        controller: controller.mensagem,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           hintText: 'Enviar uma mensagem',
                         ),
                         validator: (value){
-                          if(value.isEmpty){
+                          if(value!.isEmpty){
                             return "Campo vazio!!";
                           }
                         },
-                      )),
+                      )
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
                     //Botao enviar
-                    IconButton(
-                      icon: Icon(Icons.send),
-                        onPressed: (){
-                          //Valida se o usuario está logado ou não
-                          if (currentUser == null) {
-                            _getUser();
-                          
-                          //Valida se o usuario escreveu algo ou não
-                          } else if(validacao.currentState.validate()){
-
-                            enviarMensagem(
-                              texto: mensagem.text
-                            ).then((value) {
-                              ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                                  SnackBar(
-                                    content: Text('Mensagem enviada'),)
-                                  );
-                            mensagem.clear();
-                            }).catchError((_){
-                              ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                                  SnackBar(
-                                    content: Text('Mensagem não enviada'),)
-                                  );
-                              mensagem.clear();   
-                            });
-
-                          }
-                        },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.send),
+                          onPressed: (){
+                            if (controller.currentUser == null) {
+                              controller.getUser(context);
+                            } else if (controller.validacao.currentState!.validate()) {
+                              enviarMensagem(
+                                texto: controller.mensagem.text, 
+                                currentUser: controller.currentUser!
+                              );
+                            }
+                          },
+                      ),
                     )
                   ],
                 ),
@@ -160,49 +165,4 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
-
-
-
-
-
-
-
-  Future enviarMensagem({String texto})async{
-    Map<String, dynamic> data = {
-      "uid" : currentUser?.uid,
-      "sendName": currentUser?.displayName,
-      "Texto": texto,
-      "sendPhotourl": currentUser?.photoURL,
-      "Time": FieldValue.serverTimestamp()
-    };
-    return await FirebaseFirestore.instance.collection('Mensagens2').add(data);
-  }
-
-  
-  Future<User> _getUser() async {
-      if (currentUser != null) return currentUser;
-
-      try {
-        final GoogleSignInAccount googleSignInAccount = (await googleSignIn
-            .signIn());
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount
-            .authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-
-        var authResult = await FirebaseAuth.instance
-            .signInWithCredential(credential);
-
-        final User user = authResult.user;
-
-        return user;
-      } catch (error) {
-        return null;
-      }
-   }
-
-
 }
