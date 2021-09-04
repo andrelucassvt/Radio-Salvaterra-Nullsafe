@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
@@ -12,15 +14,6 @@ abstract class HomeStoreBase with Store {
   AudioPlayer audioPlayer;
 
   HomeStoreBase(this.audioPlayer);
-
-  static final AdRequest request = AdRequest(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      nonPersonalizedAds: true,
-    );
-
-  @observable
-  InterstitialAd? interstitialAd;
 
   @action
   Future handlePressed() async {
@@ -39,21 +32,5 @@ abstract class HomeStoreBase with Store {
         audioPlayer.stop();
         break;
     }
-  }
-
-  @action
-  Future<void> createInterstitialAd() async {
-    InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3652623512305285/7857500684', 
-      request: request, 
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad){
-          interstitialAd = ad;
-        }, 
-        onAdFailedToLoad: (LoadAdError error){
-          print('InterstitialAd failed to load: $error');
-        }
-      )
-    );
   }
 }

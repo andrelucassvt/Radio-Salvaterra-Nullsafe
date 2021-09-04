@@ -24,21 +24,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
-  final _$interstitialAdAtom = Atom(name: 'HomeStoreBase.interstitialAd');
-
-  @override
-  InterstitialAd? get interstitialAd {
-    _$interstitialAdAtom.reportRead();
-    return super.interstitialAd;
-  }
-
-  @override
-  set interstitialAd(InterstitialAd? value) {
-    _$interstitialAdAtom.reportWrite(value, super.interstitialAd, () {
-      super.interstitialAd = value;
-    });
-  }
-
   final _$handlePressedAsyncAction = AsyncAction('HomeStoreBase.handlePressed');
 
   @override
@@ -46,20 +31,10 @@ mixin _$HomeStore on HomeStoreBase, Store {
     return _$handlePressedAsyncAction.run(() => super.handlePressed());
   }
 
-  final _$createInterstitialAdAsyncAction =
-      AsyncAction('HomeStoreBase.createInterstitialAd');
-
-  @override
-  Future<void> createInterstitialAd() {
-    return _$createInterstitialAdAsyncAction
-        .run(() => super.createInterstitialAd());
-  }
-
   @override
   String toString() {
     return '''
-audioPlayer: ${audioPlayer},
-interstitialAd: ${interstitialAd}
+audioPlayer: ${audioPlayer}
     ''';
   }
 }

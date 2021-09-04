@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,18 +22,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage,HomeStore> {
+  late InterstitialAd _interstitialAd;
   @override
   void initState() {
     super.initState();
     _pegarAtt();
-    MobileAds.instance.initialize().then((value) {
-      controller.createInterstitialAd();
+    _carregarAd();
+    Future.delayed(Duration(seconds: 10),(){
+      _interstitialAd.show();
     });
-  }
-  @override
-  void dispose() {
-    controller.interstitialAd?.dispose();
-    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -41,6 +39,7 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
     return WillPopScope(
       onWillPop: () async => false, 
       child: Scaffold(
+        backgroundColor: Colors.red,
         floatingActionButton: FloatingActionButton(
           onPressed: (){
             showCupertinoModalPopup(
@@ -50,98 +49,99 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
           backgroundColor: Colors.green,
           child: Icon(Icons.info),
           ),
-        body: Stack(
-          children: [
-              Container(
-                height: size.height - 200,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.red,
-                      Colors.yellow,
-                    ]
-                  )
+        body: SafeArea(
+          child: Stack(
+            children: [
+                Container(
+                  height: size.height - 200,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.red,
+                        Colors.yellow,
+                      ]
+                    )
+                  ),
                 ),
-              ),
-              AnimatedPositioned(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeOutQuad,
-                top: keyboardOpen ? -size.height / 3.7 : 0.0,
-                child: WaveWidget(
-                  size: size,
-                  yOffset: size.height / 2.2,
-                  color: Global.white,
+                AnimatedPositioned(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeOutQuad,
+                  top: keyboardOpen ? -size.height / 3.7 : 0.0,
+                  child: WaveWidget(
+                    size: size,
+                    yOffset: size.height / 2.2,
+                    color: Global.white,
+                  ),
                 ),
+              Padding(
+                padding: const EdgeInsets.only(top: 25),
+                child: Image.asset('Imagens/Salvaterra.png'),
               ),
-            Padding(
-              padding: const EdgeInsets.only(top: 25),
-              child: Image.asset('Imagens/Salvaterra.png'),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 100),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 150,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          controller.handlePressed();
-                          await controller.interstitialAd?.show();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 10),
-                              content: Text('Conectando ao servidor'),
-                            )
-                          );
-                        },
-                        icon: Icon(Icons.play_arrow),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue
-                        ),
-                        label: Flexible(
-                          child: AutoSizeText(
-                            'Reproduzir',
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 20
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 150,
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            controller.handlePressed();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.green,
+                                duration: Duration(seconds: 10),
+                                content: Text('Conectando ao servidor'),
+                              )
+                            );
+                          },
+                          icon: Icon(Icons.play_arrow),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue
+                          ),
+                          label: Flexible(
+                            child: AutoSizeText(
+                              'Reproduzir',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 20
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ),
-                    Container(
-                      height: 60,
-                      width: 150,
-                      child: ElevatedButton.icon(
-                        onPressed: (){
-                          controller.handlePressed();
-                        },
-                        icon: Icon(Icons.pause),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.red
-                        ),
-                        label: Flexible(
-                          child: AutoSizeText(
-                            'Parar',
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 20
-                            ),
-                            ),
-                        ),
-                      )
-                    ),
+                        )
+                      ),
+                      Container(
+                        height: 60,
+                        width: 150,
+                        child: ElevatedButton.icon(
+                          onPressed: (){
+                            controller.handlePressed();
+                          },
+                          icon: Icon(Icons.pause),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red
+                          ),
+                          label: Flexible(
+                            child: AutoSizeText(
+                              'Parar',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 20
+                              ),
+                              ),
+                          ),
+                        )
+                      ),
     
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -157,4 +157,19 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
         });
       }
   }
+
+  _carregarAd(){
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-3652623512305285/7857500684',
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          // Keep a reference to the ad so you can show it later.
+          this._interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ));
+    }
 }
