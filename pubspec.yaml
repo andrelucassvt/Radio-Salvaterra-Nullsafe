@@ -57,7 +57,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "Imagens/mini-radio.png"
+  image_path: "Imagens/icone.JPG"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -108,3 +108,4 @@ flutter:
   - Imagens/radio.png
   - Imagens/radioMais.png
   - Imagens/mini-radio.png
+  - Imagens/icone.JPG
