@@ -30,22 +30,19 @@ dependencies:
   cupertino_icons: ^1.0.3
   responsive_framework: ^0.1.4
   auto_size_text: ^3.0.0-nullsafety.0
-  audioplayers: ^0.19.1
-  curved_navigation_bar: ^1.0.1
-  hexcolor: ^2.0.4
-  firebase_core: ^1.4.0
-  cloud_firestore: ^2.4.0
-  firebase_auth: ^3.0.1
-  google_sign_in: ^5.0.7
-  shared_preferences: ^2.0.6
-  google_mobile_ads: ^0.13.3
-  image_picker: ^0.8.3
-  url_launcher: ^6.0.9
-  mobx: ^2.0.3
-  flutter_mobx: ^2.0.1
-  firebase_messaging: ^10.0.4
+  audioplayers: ^0.20.0
+  hexcolor: ^2.0.5
+  firebase_core: ^1.6.0
+  cloud_firestore: ^2.5.2
+  firebase_auth: ^3.1.1
+  google_sign_in: ^5.1.0
+  shared_preferences: ^2.0.7
+  google_mobile_ads: ^0.13.4
+  url_launcher: ^6.0.10
+  mobx: ^2.0.4
+  flutter_mobx: ^2.0.2
   share: ^2.0.4
-  flutter_modular: ^3.3.1
+  flutter_modular: ^3.4.1+1 
   
 dev_dependencies:
   flutter_test:

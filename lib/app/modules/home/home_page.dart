@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -160,12 +161,13 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
 
   _carregarAd(){
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3652623512305285/7857500684',
+      adUnitId: Platform.isAndroid ? 'ca-app-pub-3652623512305285/7857500684' : 'ca-app-pub-3652623512305285/9698448627',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
-          // Keep a reference to the ad so you can show it later.
-          this._interstitialAd = ad;
+          setState(() {
+            this._interstitialAd = ad;
+          });
         },
         onAdFailedToLoad: (LoadAdError error) {
           print('InterstitialAd failed to load: $error');
