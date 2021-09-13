@@ -1,17 +1,12 @@
 import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/animation/wave_widget.dart';
-import 'package:radiosalvaterrafm/app/modules/home/home_module.dart';
 import 'package:radiosalvaterrafm/app/modules/home/home_store.dart';
-import 'package:radiosalvaterrafm/app/modules/info/info_module.dart';
 import 'package:radiosalvaterrafm/app/modules/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 import 'package:radiosalvaterrafm/app/shared/views/atualizar_app.dart';
@@ -22,15 +17,16 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage,HomeStore> {
+class _HomePageState extends State<HomePage> {
   late InterstitialAd _interstitialAd;
+  HomeStore controller = HomeStore();
   @override
   void initState() {
     super.initState();
     _pegarAtt();
     _carregarAd();
     Future.delayed(Duration(seconds: 10),(){
-      _interstitialAd.show();
+      //_interstitialAd.show();
     });
   }
   @override
@@ -45,7 +41,7 @@ class _HomePageState extends ModularState<HomePage,HomeStore> {
           onPressed: (){
             showCupertinoModalPopup(
               context: context,
-              builder: (x) => InfoModule());
+              builder: (x) => InfoPage());
           },
           backgroundColor: Colors.green,
           child: Icon(Icons.info),

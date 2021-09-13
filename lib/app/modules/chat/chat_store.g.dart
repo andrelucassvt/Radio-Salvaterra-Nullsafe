@@ -78,11 +78,18 @@ mixin _$ChatStore on ChatStoreBase, Store {
         () => super.enviarMensagem(texto: texto, currentUser: currentUser));
   }
 
-  final _$getUserAsyncAction = AsyncAction('ChatStoreBase.getUser');
+  final _$loginGoogleAsyncAction = AsyncAction('ChatStoreBase.loginGoogle');
 
   @override
-  Future<User?> getUser(BuildContext context) {
-    return _$getUserAsyncAction.run(() => super.getUser(context));
+  Future<User?> loginGoogle(BuildContext context) {
+    return _$loginGoogleAsyncAction.run(() => super.loginGoogle(context));
+  }
+
+  final _$loginAppleAsyncAction = AsyncAction('ChatStoreBase.loginApple');
+
+  @override
+  Future<User?> loginApple(BuildContext context) {
+    return _$loginAppleAsyncAction.run(() => super.loginApple(context));
   }
 
   final _$ChatStoreBaseActionController =

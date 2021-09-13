@@ -8,12 +8,12 @@ class ChatService {
     try {
       Map<String, dynamic> data = {
         "uid" : currentUser.uid,
-        "sendName": currentUser.displayName,
+        "sendName": currentUser.displayName ?? 'Apple user',
         "Texto": texto,
-        "sendPhotourl": currentUser.photoURL,
+        "sendPhotourl": currentUser.photoURL ?? 'https://firebasestorage.googleapis.com/v0/b/chat-radio-80a3e.appspot.com/o/kisspng-computer-icons-avatar-user-profile-clip-art-5af95fab3b2d13.0220186015262923952424.jpg?alt=media&token=56d2f75b-4ab9-4fb1-93d2-703831091156',
         "Time": FieldValue.serverTimestamp()
       };
-      await FirebaseFirestore.instance.collection('Mensagens2').add(data);
+      await FirebaseFirestore.instance.collection('Mensagens1').add(data);
 
     } on ErrorMessage catch (e) {
       return 'Erro ao enviar mensagem';

@@ -1,26 +1,26 @@
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 
-part 'home_store.g.dart';
+class HomeStore with Store {
 
-class HomeStore = HomeStoreBase with _$HomeStore;
+  static final HomeStore _singleton = HomeStore._internal();
 
-abstract class HomeStoreBase with Store {
+  factory HomeStore(){
+    return _singleton;
+  }
+
+  HomeStore._internal();
+
   @observable
-  AudioPlayer audioPlayer;
-
-  HomeStoreBase(this.audioPlayer);
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @action
   Future handlePressed() async {
     switch (audioPlayer.state) {
       case PlayerState.COMPLETED:
       case PlayerState.STOPPED:
-        audioPlayer.setUrl(Global.streamUrl);
+        audioPlayer.setUrl(Global.streamUrl,isLocal: false);
         audioPlayer.resume();
         break;
 

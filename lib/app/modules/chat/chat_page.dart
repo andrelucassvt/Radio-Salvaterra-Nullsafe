@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/chat_store.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/service/chat_service.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/widgets/comentarios.dart';
 import 'package:share/share.dart';
 
@@ -13,8 +14,10 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends ModularState<ChatPage,ChatStore> {
+class _ChatPageState extends State<ChatPage> {
 
+  ChatStore controller = ChatStore(ChatService());
+  FocusNode node = FocusNode();
   @override
   void initState() {
     super.initState();
@@ -44,6 +47,11 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
     }
   }
   @override
+  void dispose() {
+    node.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +76,7 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
           children: [
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('Mensagens2').orderBy('Time',descending: true).snapshots(),
+                stream: FirebaseFirestore.instance.collection('Mensagens1').orderBy('Time',descending: true).snapshots(),
                 builder: (context,snapshot){
                   
                   if (snapshot.hasError) {
@@ -120,6 +128,7 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
                       child: TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
+                        focusNode: node,
                         controller: controller.mensagem,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -147,12 +156,17 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
                         icon: Icon(Icons.send),
                           onPressed: (){
                             if (controller.currentUser == null) {
-                              controller.getUser(context);
+                              if(Platform.isAndroid){
+                                controller.loginGoogle(context);
+                              }else{
+                                controller.loginApple(context);
+                              }
                             } else if (controller.validacao.currentState!.validate()) {
                               enviarMensagem(
                                 texto: controller.mensagem.text, 
                                 currentUser: controller.currentUser!
                               );
+                              node.unfocus();
                             }
                           },
                       ),

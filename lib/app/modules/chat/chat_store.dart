@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/service/chat_service.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'chat_store.g.dart';
 
@@ -35,7 +36,7 @@ abstract class ChatStoreBase with Store {
   }
 
   @action
-  Future<User?> getUser(BuildContext context) async {
+  Future<User?> loginGoogle(BuildContext context) async {
     if (currentUser != null) return currentUser;
 
     try {
@@ -45,6 +46,38 @@ abstract class ChatStoreBase with Store {
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
+      );
+
+      var authResult = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      final User user = authResult.user!;
+
+      return user;
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Não foi possivel fazer login')
+        ),
+      );
+    }
+  }
+  @action
+  Future<User?> loginApple(BuildContext context) async {
+    if (currentUser != null) return currentUser;
+
+    try {
+      AuthorizationCredentialAppleID appleResult= await  SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ]
+      );
+      
+      final AuthCredential credential = OAuthProvider('apple.com').credential(
+        accessToken: appleResult.authorizationCode,
+        idToken: appleResult.identityToken,
       );
 
       var authResult = await FirebaseAuth.instance
