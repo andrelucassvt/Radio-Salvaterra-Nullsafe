@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/chat_page.dart';
-import 'package:radiosalvaterrafm/app/modules/home/home_page.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/presenter/pages/chat_module.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/home/home_module.dart';
 
 class StartPage extends StatefulWidget {
   @override
   StartPageState createState() => StartPageState();
 }
 class StartPageState extends State<StartPage> with TickerProviderStateMixin {
-  List<Widget> _pages = [HomePage(), ChatPage()];
+  List<Widget> _pages = [HomeModule(), ChatModule()];
   var _tabs = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
