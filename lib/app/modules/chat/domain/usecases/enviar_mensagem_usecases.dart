@@ -18,7 +18,7 @@ class EnviarMensagemUsecasesImpl implements EnviarMensagemUsecases{
     if (sendMessageDto.user == null) {
       throw EnvioMessageError('Error ao encontrar usuário');
     }
-    repository.enviarMensagem(sendMessageDto);
+    repository.enviarComentario(sendMessageDto);
   }
   
 }

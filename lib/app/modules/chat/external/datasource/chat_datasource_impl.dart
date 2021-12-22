@@ -7,7 +7,7 @@ import 'package:radiosalvaterrafm/app/modules/chat/infra/datasource/chat_datasou
 class ChatDatasourceImpl implements ChatDatasource{
 
   @override
-  Future<void> enviarMensagem(SendMessageDto sendMessageDto) async {
+  Future<void> enviarComentario(SendMessageDto sendMessageDto) async {
       Map<String, dynamic> data = {
         "uid" : sendMessageDto.user.uid,
         "sendName": sendMessageDto.user.displayName ?? 'User anônimo',
