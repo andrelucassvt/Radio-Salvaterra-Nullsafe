@@ -3,8 +3,8 @@ import 'package:radiosalvaterrafm/app/modules/home/domain/error/player_audio_err
 import 'package:radiosalvaterrafm/app/modules/home/domain/repository/player_audio_repository.dart';
 
 abstract class GetPlayerUsecase {
-  Future<Either<PlayerAudioError,int>> play();
-  Future<Either<PlayerAudioError,int>> pause();
+  Future<Either<PlayerAudioError,void>> play();
+  Future<Either<PlayerAudioError,void>> pause();
 }
 
 
@@ -13,12 +13,12 @@ class GetPlayerUsecaseImpl implements GetPlayerUsecase {
   GetPlayerUsecaseImpl(this.repository);
 
   @override
-  Future<Either<PlayerAudioError, int>> pause() async {
+  Future<Either<PlayerAudioError, void>> pause() async {
     return await repository.pauseAudio();
   }
 
   @override
-  Future<Either<PlayerAudioError, int>> play() async {
+  Future<Either<PlayerAudioError, void>> play() async {
     return await repository.playerAudio();
   }
   

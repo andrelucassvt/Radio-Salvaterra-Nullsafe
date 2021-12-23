@@ -9,7 +9,7 @@ class PlayerAudioRepositoryImpl implements PlayerAudiorRepository{
  PlayerAudioRepositoryImpl(this.player);
 
   @override
-  Future<Either<PlayerAudioError, int>> playerAudio() async {
+  Future<Either<PlayerAudioError, void>> playerAudio() async {
     try {
       var radio = await player.playerAudio();
       return Right(radio);
@@ -19,7 +19,7 @@ class PlayerAudioRepositoryImpl implements PlayerAudiorRepository{
   }
 
   @override
-  Future<Either<PlayerAudioError, int>> pauseAudio() async {
+  Future<Either<PlayerAudioError, void>> pauseAudio() async {
     try {
       var radio = await player.pauseAudio();
       return Right(radio);

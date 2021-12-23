@@ -1,10 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/pages/chat_store.dart';
@@ -60,6 +58,24 @@ class _ChatPageState extends ModularState<ChatPage,ChatStore> {
             Expanded(
               child: Observer(
                 builder: (_){
+
+                  if (controller.currentUser == null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Faça login com o google para ter acesso ao chat'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            child: Text('Login com google'),
+                            onPressed: () => controller.loginGoogle(context)
+                          )
+                        ],
+                      ),
+                    );
+                  }
 
                   if (controller.observableStream.hasError) {
                     return Center(

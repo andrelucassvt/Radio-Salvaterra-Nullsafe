@@ -1,4 +1,4 @@
-class EnvioMessageError implements Exception {
+class EnvioComentarioError implements Exception {
   String message;
-  EnvioMessageError(this.message);
+  EnvioComentarioError(this.message);
 }

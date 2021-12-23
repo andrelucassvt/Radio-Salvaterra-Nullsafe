@@ -44,20 +44,22 @@ abstract class ChatStoreBase with Store {
   @action
   Future<void> enviarMensagem({SendMessageDto sendMessageDto,BuildContext context}) async {
     loginGoogle(context);
-    try {
-      await enviarMensagemUsecases(sendMessageDto);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Mensagem enviada com sucesso'),
-        backgroundColor: Colors.blue,
-      )); 
-    } on ComentarioError catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.message),
-        backgroundColor: Colors.red,
-      ));
-    } finally {
-      mensagem.clear();
-    }
+    var result = await enviarMensagemUsecases(sendMessageDto);
+    result.fold(
+      (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(failure.message),
+          backgroundColor: Colors.red,
+        ));
+      }, 
+      (sucess) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Mensagem enviada com sucesso'),
+          backgroundColor: Colors.blue,
+        )); 
+      }
+    );
+    mensagem.clear();
   }
 
   @action

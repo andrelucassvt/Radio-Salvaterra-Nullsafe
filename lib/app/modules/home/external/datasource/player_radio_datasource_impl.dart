@@ -10,7 +10,7 @@ class PlayerAudioDatasourceImpl implements PlayerAudioDatasource {
   PlayerAudioDatasourceImpl(this.player);
 
   @override
-  Future<int> playerAudio() {
+  Future<void> playerAudio() {
     if (player.state == PlayerState.STOPPED || player.state == PlayerState.PAUSED) {
       player.setUrl(HelperGlobal.streamUrl);
       return player.resume();
@@ -21,7 +21,7 @@ class PlayerAudioDatasourceImpl implements PlayerAudioDatasource {
   }
 
   @override
-  Future<int> pauseAudio() {
+  Future<void> pauseAudio() {
     if(player.state == PlayerState.PLAYING){
       return player.stop();
     }

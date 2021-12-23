@@ -3,7 +3,7 @@ import 'package:radiosalvaterrafm/app/modules/home/domain/error/player_audio_err
 
 abstract class PlayerAudiorRepository {
   
-  Future<Either<PlayerAudioError,int>> playerAudio();
-  Future<Either<PlayerAudioError,int>> pauseAudio();
+  Future<Either<PlayerAudioError,void>> playerAudio();
+  Future<Either<PlayerAudioError,void>> pauseAudio();
 
 }

@@ -4,19 +4,19 @@ import 'package:radiosalvaterrafm/app/modules/chat/domain/error/envio_message_er
 import 'package:radiosalvaterrafm/app/modules/chat/domain/repository/chat_repository.dart';
 
 abstract class EnviarMensagemUsecases {
-  Future<void> call(SendMessageDto sendMessageDto);
+  Future<Either<EnvioComentarioError,void>> call(SendMessageDto sendMessageDto);
 }
 
 class EnviarMensagemUsecasesImpl implements EnviarMensagemUsecases{
   final ChatRepository repository;
   EnviarMensagemUsecasesImpl(this.repository);
   @override
-  Future<void> call(SendMessageDto sendMessageDto) async {
+  Future<Either<EnvioComentarioError,void>> call(SendMessageDto sendMessageDto) async {
     if (sendMessageDto.texto.isEmpty) {
-      throw EnvioMessageError('Texto está vazio');
+      return left(EnvioComentarioError('Texto está vazio'));
     }
     if (sendMessageDto.user == null) {
-      throw EnvioMessageError('Error ao encontrar usuário');
+      return left(EnvioComentarioError('Error ao encontrar usuário'));
     }
     repository.enviarComentario(sendMessageDto);
   }

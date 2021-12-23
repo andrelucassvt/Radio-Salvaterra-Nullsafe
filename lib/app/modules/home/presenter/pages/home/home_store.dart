@@ -12,7 +12,7 @@ abstract class HomeStoreBase with Store {
   final GetPlayerUsecase repository;
   HomeStoreBase(this.repository);
 
-  Future<int> playerAudio(BuildContext context) async {
+  Future<void> playerAudio(BuildContext context) async {
     var audio = await repository.play();
     audio.fold(
       (l) {
@@ -31,7 +31,7 @@ abstract class HomeStoreBase with Store {
     );
   }
   
-  Future<int> playerAudioPause(BuildContext context) async {
+  Future<void> playerAudioPause(BuildContext context) async {
     var audio = await repository.pause();
     audio.fold(
       (l) {
