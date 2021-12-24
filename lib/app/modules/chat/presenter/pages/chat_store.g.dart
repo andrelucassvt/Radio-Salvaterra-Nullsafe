@@ -84,16 +84,6 @@ mixin _$ChatStore on ChatStoreBase, Store {
     });
   }
 
-  final _$enviarMensagemAsyncAction =
-      AsyncAction('ChatStoreBase.enviarMensagem');
-
-  @override
-  Future<void> enviarMensagem(
-      {SendMessageDto sendMessageDto, BuildContext context}) {
-    return _$enviarMensagemAsyncAction.run(() =>
-        super.enviarMensagem(sendMessageDto: sendMessageDto, context: context));
-  }
-
   final _$loginGoogleAsyncAction = AsyncAction('ChatStoreBase.loginGoogle');
 
   @override

@@ -17,7 +17,8 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<Either<EnvioComentarioError,void>> enviarComentario(SendMessageDto sendMessageDto) async {
     try {
-      return Right(await chatDatasource.enviarComentario(sendMessageDto));
+      var result = await chatDatasource.enviarComentario(sendMessageDto);
+      return Right(result);
     } on EnvioComentarioError catch (e) {
       throw Left(EnvioComentarioError('Error ao enviar mensagem'));
     }

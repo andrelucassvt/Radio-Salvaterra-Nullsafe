@@ -18,7 +18,7 @@ class EnviarMensagemUsecasesImpl implements EnviarMensagemUsecases{
     if (sendMessageDto.user == null) {
       return left(EnvioComentarioError('Error ao encontrar usuário'));
     }
-    repository.enviarComentario(sendMessageDto);
+    return await repository.enviarComentario(sendMessageDto);
   }
   
 }

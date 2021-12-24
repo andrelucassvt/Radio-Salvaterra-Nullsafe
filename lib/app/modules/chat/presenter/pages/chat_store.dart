@@ -41,7 +41,6 @@ abstract class ChatStoreBase with Store {
   @action
   void setUser(User user)=> currentUser = user;
   
-  @action
   Future<void> enviarMensagem({SendMessageDto sendMessageDto,BuildContext context}) async {
     loginGoogle(context);
     var result = await enviarMensagemUsecases(sendMessageDto);
