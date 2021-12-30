@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:radiosalvaterrafm/app/modules/home/domain/error/audio_error.dart';
 import 'package:radiosalvaterrafm/app/modules/home/infra/datasource/player_radio_datasource.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 

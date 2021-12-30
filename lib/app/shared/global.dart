@@ -5,7 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 class HelperGlobal {
   static const Color white = const Color(0xffffffff);
   static const streamUrl =
-      "https://s10.maxcast.com.br:8234/live";
+      "https://s17.maxcast.com.br:8150/live";
 
   static const String atualizacao = '6';
 

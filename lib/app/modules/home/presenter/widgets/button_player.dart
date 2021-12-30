@@ -17,7 +17,9 @@ class BottonPlayerWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           vertical: 25
         ),
-        width: 100,
+        constraints: BoxConstraints(
+          minWidth: 100
+        ),
         decoration: BoxDecoration(
           color: isPlayer ? Colors.blue : Colors.red,
           borderRadius: BorderRadius.circular(10)
