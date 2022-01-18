@@ -43,7 +43,7 @@ android {
         applicationId "com.andre.radiosalvaterrafm"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 25
+        versionCode 26
         versionName "2.1.5"
     }
 
