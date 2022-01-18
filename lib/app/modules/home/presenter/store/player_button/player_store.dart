@@ -1,21 +1,16 @@
-
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_audio.dart';
 
-part 'home_store.g.dart';
-
-
-class HomeController = HomeStoreBase with _$HomeController;
-
-abstract class HomeStoreBase with Store {
+class PlayerStore extends ValueNotifier<bool> {
   final GetPlayerUsecase repository;
-  HomeStoreBase(this.repository);
+  PlayerStore(this.repository) : super(false);
 
   Future<void> playerAudio(BuildContext context) async {
+    value = true;
     var audio = await repository.play();
     audio.fold(
       (l) {
+        value = false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(l.message),
           backgroundColor: Colors.red,
@@ -24,13 +19,14 @@ abstract class HomeStoreBase with Store {
       (r) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Conectando ao servidor"),
-          duration: Duration(seconds: 8),
+          duration: Duration(seconds: 5),
           backgroundColor: Colors.blue,
         ));
+        Future.delayed(Duration(seconds: 6),() => value = false);
       }
     );
   }
-  
+
   Future<void> playerAudioPause(BuildContext context) async {
     var audio = await repository.pause();
     audio.fold(
@@ -43,5 +39,4 @@ abstract class HomeStoreBase with Store {
       (r) {}
     );
   }
-
 }

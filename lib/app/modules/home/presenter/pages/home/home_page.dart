@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/animation/wave_widget.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/home/home_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 import 'package:radiosalvaterrafm/app/shared/views/atualizar_app.dart';
@@ -16,16 +16,18 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage,HomeController> {
+class _HomePageState extends State<HomePage> {
+
   InterstitialAd _interstitialAd;
+  final controller = Modular.get<PlayerStore>();
 
   @override
   void initState() {
     super.initState();
     _pegarAtt();
     _carregarAd();
-    Future.delayed(Duration(seconds: 10),(){
-      _interstitialAd.show();
+    Future.delayed(Duration(seconds: 15),(){
+     _interstitialAd.show();
     });
   }
   
@@ -81,10 +83,19 @@ class _HomePageState extends ModularState<HomePage,HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    BottonPlayerWidget(
-                      isPlayer: true,
+                    ValueListenableBuilder<bool>(
+                      valueListenable: controller,
+                      builder: (context,value,child) {
+                        return BottonPlayerWidget(
+                          isButtonPause: false,
+                          isProgress: value,
+                          pauseOrPlayerFunction: () async => controller.playerAudio(context),
+                        );
+                      }
                     ),
-                    BottonPlayerWidget(),
+                    BottonPlayerWidget(
+                      pauseOrPlayerFunction: () async => controller.playerAudioPause(context),
+                    ),
                   ],
                 ),
               ),

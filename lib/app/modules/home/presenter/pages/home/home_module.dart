@@ -6,7 +6,7 @@ import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_au
 import 'package:radiosalvaterrafm/app/modules/home/external/datasource/player_radio_datasource_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/home/infra/repository/player_audio_repository_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/home/home_page.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/home/home_store.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store.dart';
 
 class HomeModule extends WidgetModule {
 
@@ -16,7 +16,7 @@ class HomeModule extends WidgetModule {
     Bind((i) => PlayerAudioDatasourceImpl(i<AudioPlayer>())),
     Bind((i) => PlayerAudioRepositoryImpl(i<PlayerAudioDatasourceImpl>())),
     Bind((i) => GetPlayerUsecaseImpl(i<PlayerAudioRepositoryImpl>())),
-    Bind.singleton((i) => HomeController(i<GetPlayerUsecaseImpl>()))
+    Bind.singleton((i) => PlayerStore(i<GetPlayerUsecaseImpl>())),
   ];
 
   @override
