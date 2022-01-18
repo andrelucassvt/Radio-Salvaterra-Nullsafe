@@ -9,9 +9,9 @@ class HelperGlobal {
 
   static const String atualizacao = '6';
 
-  static Future<String> version() async {
+  static Future<double> version() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    return version;
+    String code = packageInfo.buildNumber;
+    return double.parse(code);
   }
 } 

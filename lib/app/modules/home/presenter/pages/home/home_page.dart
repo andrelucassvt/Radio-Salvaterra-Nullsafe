@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     _pegarAtt();
     _carregarAd();
     Future.delayed(Duration(seconds: 15),(){
-     _interstitialAd.show();
+     //_interstitialAd.show();
     });
   }
   
@@ -106,10 +106,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
   _pegarAtt() async {
-    String version = await HelperGlobal.version();
+    double codeBuilder = await HelperGlobal.version();
     DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection('status').doc('att').get();
     Map<String, dynamic> data = snapshot.data();
-    if (data['valid'] == true && data['version'] != version) {
+    if (data['build'] > codeBuilder) {
       Future.delayed(Duration.zero,(){
         showCupertinoModalPopup(
           context: context,
