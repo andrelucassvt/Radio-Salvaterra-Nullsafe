@@ -14,8 +14,8 @@ class PlayerbuttonCubit extends Cubit<PlayerbuttonState> {
     emit(PlayerbuttonLoading());
     var audio = await repository.play();
     audio.fold(
-      (l) => emit(PlayerbuttonFailure(l)), 
-      (r) {Future.delayed(Duration(seconds: 10),() => emit(PlayerbuttonSucess()));}
+      (failure) => emit(PlayerbuttonFailure(failure)), 
+      (sucess) {Future.delayed(Duration(seconds: 10),() => emit(PlayerbuttonSucess()));}
     );
   }
 
