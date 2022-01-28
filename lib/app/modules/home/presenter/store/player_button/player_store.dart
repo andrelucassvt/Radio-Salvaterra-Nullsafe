@@ -1,29 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_audio.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store_state.dart';
 
-class PlayerStore extends ValueNotifier<bool> {
+class PlayerStore extends ValueNotifier<PlayerStoreState> {
   final GetPlayerUsecase repository;
-  PlayerStore(this.repository) : super(false);
+  PlayerStore(this.repository) : super(PlayerStoreInitial());
 
   Future<void> playerAudio(BuildContext context) async {
-    value = true;
+    value = PlayerStoreLoading();
     var audio = await repository.play();
     audio.fold(
-      (l) {
-        value = false;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(l.message),
-          backgroundColor: Colors.red,
-        ));
-      }, 
-      (r) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Conectando ao servidor"),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.blue,
-        ));
-        Future.delayed(Duration(seconds: 6),() => value = false);
-      }
+      (l) {value = PlayerStoreFailure(error: l);}, 
+      (r) {Future.delayed(Duration(seconds: 10),() => value = PlayerStoreSucess());}
     );
   }
 

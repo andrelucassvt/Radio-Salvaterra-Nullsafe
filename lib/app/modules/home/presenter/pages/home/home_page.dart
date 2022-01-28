@@ -6,6 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/animation/wave_widget.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store_state.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 import 'package:radiosalvaterrafm/app/shared/views/atualizar_app.dart';
@@ -27,7 +28,25 @@ class _HomePageState extends State<HomePage> {
     _pegarAtt();
     _carregarAd();
     Future.delayed(Duration(seconds: 15),(){
-     _interstitialAd.show();
+     //_interstitialAd.show();
+    });
+    controller.addListener(() { 
+      final state = controller.value;
+      if (state is PlayerStoreLoading) {
+        print('caiu aqui');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Conectando ao servidor"),
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.blue,
+        ));
+        return;
+      }
+      if (state is PlayerStoreFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(state.error.message),
+          backgroundColor: Colors.red,
+        ));
+      }
     });
   }
   
@@ -83,12 +102,12 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ValueListenableBuilder<bool>(
+                    ValueListenableBuilder<PlayerStoreState>(
                       valueListenable: controller,
                       builder: (context,value,child) {
                         return BottonPlayerWidget(
                           isButtonPause: false,
-                          isProgress: value,
+                          isProgress: value is PlayerStoreLoading,
                           pauseOrPlayerFunction: () async => controller.playerAudio(context),
                         );
                       }
