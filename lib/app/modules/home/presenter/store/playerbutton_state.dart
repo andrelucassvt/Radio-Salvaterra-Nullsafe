@@ -1,4 +1,4 @@
-part of 'playerbutton_cubit.dart';
+part of 'playerbutton_store.dart';
 
 @immutable
 abstract class PlayerbuttonState {}

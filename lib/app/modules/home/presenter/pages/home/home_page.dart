@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/animation/wave_widget.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/cubit/playerbutton_cubit.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   InterstitialAd _interstitialAd;
-  final playerButtonCubit = Modular.get<PlayerbuttonCubit>();
+  final playerButtonCubit = Modular.get<PlayerbuttonStore>();
 
   @override
   void initState() {
@@ -30,12 +30,22 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(Duration(seconds: 15),(){
      //_interstitialAd.show();
     });
-  }
-
-  @override
-  void dispose() {
-    playerButtonCubit.close();
-    super.dispose();
+    playerButtonCubit.addListener(() { 
+      final value = playerButtonCubit.value;
+      if (value is PlayerbuttonLoading) {
+        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Conectando ao servidor"),
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.blue,
+        ));
+      }
+      if (value is PlayerbuttonFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(value.error.message),
+          backgroundColor: Colors.red,
+        ));
+      }
+    });
   }
   
   @override
@@ -90,28 +100,12 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    BlocConsumer<PlayerbuttonCubit, PlayerbuttonState>(
-                      bloc: playerButtonCubit,
-                      listener: (context,state){
-                        if (state is PlayerbuttonLoading) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Conectando ao servidor"),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Colors.blue,
-                          ));
-                          return;
-                        }
-                        if (state is PlayerbuttonFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(state.error.message),
-                            backgroundColor: Colors.red,
-                          ));
-                        }
-                      },
-                      builder: (context,state) {
+                    ValueListenableBuilder<PlayerbuttonState>(
+                      valueListenable: playerButtonCubit,
+                      builder: (context,value,child) {
                         return BottonPlayerWidget(
                           isButtonPause: false,
-                          isProgress: state is PlayerbuttonLoading,
+                          isProgress: value is PlayerbuttonLoading,
                           pauseOrPlayerFunction: () async => playerButtonCubit.playerAudio(),
                         );
                       }

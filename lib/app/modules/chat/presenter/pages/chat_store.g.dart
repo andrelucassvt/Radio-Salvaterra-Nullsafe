@@ -54,36 +54,6 @@ mixin _$ChatStore on ChatStoreBase, Store {
     });
   }
 
-  final _$mensagemAtom = Atom(name: 'ChatStoreBase.mensagem');
-
-  @override
-  TextEditingController get mensagem {
-    _$mensagemAtom.reportRead();
-    return super.mensagem;
-  }
-
-  @override
-  set mensagem(TextEditingController value) {
-    _$mensagemAtom.reportWrite(value, super.mensagem, () {
-      super.mensagem = value;
-    });
-  }
-
-  final _$validacaoAtom = Atom(name: 'ChatStoreBase.validacao');
-
-  @override
-  GlobalKey<FormState> get validacao {
-    _$validacaoAtom.reportRead();
-    return super.validacao;
-  }
-
-  @override
-  set validacao(GlobalKey<FormState> value) {
-    _$validacaoAtom.reportWrite(value, super.validacao, () {
-      super.validacao = value;
-    });
-  }
-
   final _$loginGoogleAsyncAction = AsyncAction('ChatStoreBase.loginGoogle');
 
   @override
@@ -121,9 +91,7 @@ mixin _$ChatStore on ChatStoreBase, Store {
     return '''
 observableStream: ${observableStream},
 googleSignIn: ${googleSignIn},
-currentUser: ${currentUser},
-mensagem: ${mensagem},
-validacao: ${validacao}
+currentUser: ${currentUser}
     ''';
   }
 }

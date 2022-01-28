@@ -15,13 +15,13 @@ class ChatDatasourceImpl implements ChatDatasource{
         "sendPhotourl": sendMessageDto.user.photoURL ?? 'https://firebasestorage.googleapis.com/v0/b/chat-radio-80a3e.appspot.com/o/kisspng-computer-icons-avatar-user-profile-clip-art-5af95fab3b2d13.0220186015262923952424.jpg?alt=media&token=56d2f75b-4ab9-4fb1-93d2-703831091156',
         "Time": FieldValue.serverTimestamp()
       };
-      return FirebaseFirestore.instance.collection('Mensagens1').add(data);
+      return FirebaseFirestore.instance.collection('Mensagens3').add(data);
   }
 
   @override
   Stream<List<ComentarioEntity>> getComentarios() {
     var list = FirebaseFirestore.instance
-      .collection('Mensagens1')
+      .collection('Mensagens3')
       .orderBy('Time',descending: true)
       .snapshots()
       .map((event) {

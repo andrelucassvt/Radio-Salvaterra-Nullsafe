@@ -13,7 +13,7 @@ part 'chat_store.g.dart';
 
 class ChatStore = ChatStoreBase with _$ChatStore;
 abstract class ChatStoreBase with Store {
-  final EnviarMensagemUsecases enviarMensagemUsecases;
+  final EnviarComentarioUsecases enviarMensagemUsecases;
   final GetComentariosUsecases getComentariosUsecases;
 
   ChatStoreBase({
@@ -32,34 +32,9 @@ abstract class ChatStoreBase with Store {
   @observable
   User currentUser;
 
-  @observable
-  TextEditingController mensagem = TextEditingController();
-
-  @observable
-  GlobalKey<FormState> validacao = GlobalKey<FormState>();
-
   @action
   void setUser(User user)=> currentUser = user;
   
-  Future<void> enviarMensagem({SendMessageDto sendMessageDto,BuildContext context}) async {
-    loginGoogle(context);
-    var result = await enviarMensagemUsecases(sendMessageDto);
-    result.fold(
-      (failure) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(failure.message),
-          backgroundColor: Colors.red,
-        ));
-      }, 
-      (sucess) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Mensagem enviada com sucesso'),
-          backgroundColor: Colors.blue,
-        )); 
-      }
-    );
-    mensagem.clear();
-  }
 
   @action
   getComentarios() {

@@ -6,16 +6,16 @@ import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_au
 
 part 'playerbutton_state.dart';
 
-class PlayerbuttonCubit extends Cubit<PlayerbuttonState> {
+class PlayerbuttonStore extends ValueNotifier<PlayerbuttonState> {
   final GetPlayerUsecase repository;
-  PlayerbuttonCubit(this.repository) : super(PlayerbuttonInitial());
+  PlayerbuttonStore(this.repository) : super(PlayerbuttonInitial());
 
  Future<void> playerAudio() async {
-    emit(PlayerbuttonLoading());
+    value = PlayerbuttonLoading();
     var audio = await repository.play();
     audio.fold(
-      (failure) => emit(PlayerbuttonFailure(failure)), 
-      (sucess) {Future.delayed(Duration(seconds: 10),() => emit(PlayerbuttonSucess()));}
+      (failure) => value = PlayerbuttonFailure(failure), 
+      (sucess) => Future.delayed(Duration(seconds: 10),() => value = PlayerbuttonSucess())
     );
   }
 
