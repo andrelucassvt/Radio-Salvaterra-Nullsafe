@@ -42,6 +42,7 @@ dependencies:
   progress_state_button: ^1.0.4
   flutter_mobx: ^2.0.2
   share: ^2.0.4
+  flutter_bloc: ^8.0.1
   flutter_modular: ^4.2.0
   package_info_plus: ^1.3.0
   dartz: ^0.10.1
