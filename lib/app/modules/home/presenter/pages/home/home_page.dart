@@ -31,6 +31,12 @@ class _HomePageState extends State<HomePage> {
      //_interstitialAd.show();
     });
   }
+
+  @override
+  void dispose() {
+    playerButtonCubit.close();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
