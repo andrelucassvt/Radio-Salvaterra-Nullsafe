@@ -1,17 +1,21 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'package:radiosalvaterrafm/app/modules/home/domain/error/player_audio_error.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_audio.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store_state.dart';
 
-class PlayerStore extends ValueNotifier<PlayerStoreState> {
+part 'playerbutton_state.dart';
+
+class PlayerbuttonStore extends ValueNotifier<PlayerbuttonState> {
   final GetPlayerUsecase repository;
-  PlayerStore(this.repository) : super(PlayerStoreInitial());
+  PlayerbuttonStore(this.repository) : super(PlayerbuttonInitial());
 
-  Future<void> playerAudio(BuildContext context) async {
-    value = PlayerStoreLoading();
+ Future<void> playerAudio() async {
+    value = PlayerbuttonLoading();
     var audio = await repository.play();
     audio.fold(
-      (l) {value = PlayerStoreFailure(error: l);}, 
-      (r) {Future.delayed(Duration(seconds: 10),() => value = PlayerStoreSucess());}
+      (failure) => value = PlayerbuttonFailure(failure), 
+      (sucess) => Future.delayed(Duration(seconds: 10),() => value = PlayerbuttonSucess())
     );
   }
 

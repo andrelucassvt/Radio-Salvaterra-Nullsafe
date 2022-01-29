@@ -3,13 +3,13 @@ import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.d
 import 'package:radiosalvaterrafm/app/modules/chat/domain/error/envio_message_error.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/repository/chat_repository.dart';
 
-abstract class EnviarMensagemUsecases {
+abstract class EnviarComentarioUsecases {
   Future<Either<EnvioComentarioError,void>> call(SendMessageDto sendMessageDto);
 }
 
-class EnviarMensagemUsecasesImpl implements EnviarMensagemUsecases{
+class EnviarComentarioUsecasesImpl implements EnviarComentarioUsecases{
   final ChatRepository repository;
-  EnviarMensagemUsecasesImpl(this.repository);
+  EnviarComentarioUsecasesImpl(this.repository);
   @override
   Future<Either<EnvioComentarioError,void>> call(SendMessageDto sendMessageDto) async {
     if (sendMessageDto.texto.isEmpty) {

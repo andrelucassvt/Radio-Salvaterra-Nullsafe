@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/animation/wave_widget.dart';
+import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/store/player_button/player_store_state.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 import 'package:radiosalvaterrafm/app/shared/views/atualizar_app.dart';
@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   InterstitialAd _interstitialAd;
-  final controller = Modular.get<PlayerStore>();
+  final playerButtonCubit = Modular.get<PlayerbuttonStore>();
 
   @override
   void initState() {
@@ -30,20 +30,18 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(Duration(seconds: 15),(){
      //_interstitialAd.show();
     });
-    controller.addListener(() { 
-      final state = controller.value;
-      if (state is PlayerStoreLoading) {
-        print('caiu aqui');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    playerButtonCubit.addListener(() { 
+      final value = playerButtonCubit.value;
+      if (value is PlayerbuttonLoading) {
+        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Conectando ao servidor"),
           duration: Duration(seconds: 5),
           backgroundColor: Colors.blue,
         ));
-        return;
       }
-      if (state is PlayerStoreFailure) {
+      if (value is PlayerbuttonFailure) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(state.error.message),
+          content: Text(value.error.message),
           backgroundColor: Colors.red,
         ));
       }
@@ -102,18 +100,18 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ValueListenableBuilder<PlayerStoreState>(
-                      valueListenable: controller,
+                    ValueListenableBuilder<PlayerbuttonState>(
+                      valueListenable: playerButtonCubit,
                       builder: (context,value,child) {
                         return BottonPlayerWidget(
                           isButtonPause: false,
-                          isProgress: value is PlayerStoreLoading,
-                          pauseOrPlayerFunction: () async => controller.playerAudio(context),
+                          isProgress: value is PlayerbuttonLoading,
+                          pauseOrPlayerFunction: () async => playerButtonCubit.playerAudio(),
                         );
                       }
                     ),
                     BottonPlayerWidget(
-                      pauseOrPlayerFunction: () async => controller.playerAudioPause(context),
+                      pauseOrPlayerFunction: () async => playerButtonCubit.playerAudioPause(context),
                     ),
                   ],
                 ),
