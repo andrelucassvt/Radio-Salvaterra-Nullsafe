@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';

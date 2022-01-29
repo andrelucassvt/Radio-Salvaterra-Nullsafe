@@ -6,8 +6,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/presenter/pages/chat_store.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/enviar_comentario/enviarcomentario_store.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/get_comentarios/get_comentarios_store.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/widgets/comentarios.dart';
 import 'package:share/share.dart';
 
@@ -16,14 +16,16 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends ModularState<ChatPage, ChatStore> {
+class _ChatPageState extends State<ChatPage> {
+
   final enviarComentarioStore = Modular.get<EnviarcomentarioStore>();
+  final getComentariosStore = Modular.get<GetComentariosStore>();
 
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      controller.setUser(user);
+      getComentariosStore.setUser(user);
     });
     enviarComentarioStore.addListener(() { 
       final value = enviarComentarioStore.value;
@@ -72,56 +74,66 @@ class _ChatPageState extends ModularState<ChatPage, ChatStore> {
         key: enviarComentarioStore.validacao,
         child: Column(
           children: [
-            Expanded(child: Observer(
-              builder: (_) {
-                if (controller.currentUser == null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Faça login com o google para ter acesso ao chat'),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          child: Text('Login com google'),
-                          onPressed: () => controller.loginGoogle(context),
-                        )
-                      ],
-                    ),
-                  );
-                }
+            Expanded(
+              child: ValueListenableBuilder<GetComentariosState>(
+                valueListenable: getComentariosStore,
+                builder: (context,value,child) {
 
-                if (controller.observableStream.hasError) {
-                  return Center(
-                    child: ElevatedButton(
-                      child: Text('Erro ao carregar comentários :('),
-                      onPressed: () {
-                        controller.getComentarios();
-                      },
-                    ),
-                  );
-                }
-                if (controller.observableStream.data == null) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                List<ComentarioEntity> list = controller.observableStream.data;
-
-                return ListView.builder(
-                  itemCount: list.length,
-                  reverse: true,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ComentariosWidget(
-                      comentarioEntity: list[index],
+                  if (value is GetComentariosGoogleLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                );
-              },
-            )),
+                  }
+
+                  if (value is GetComentariosLoginGoogleError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Faça login com o google para ter acesso ao chat'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            child: Text('Login com google'),
+                            onPressed: () => getComentariosStore.loginGoogle(context),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+
+                  if (value is GetComentariosLoginGoogleSucess) {
+
+                    return StreamBuilder<List<ComentarioEntity>>(
+                      stream: getComentariosStore.getComentariosUsecases(),
+                      builder: (context, snapshot) {
+
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        List<ComentarioEntity> list = snapshot.data;
+
+                        return ListView.builder(
+                          itemCount: list.length,
+                          reverse: true,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return ComentariosWidget(
+                              comentarioEntity: list[index],
+                            );
+                          },
+                        );
+                      }
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
+              )
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
@@ -160,11 +172,11 @@ class _ChatPageState extends ModularState<ChatPage, ChatStore> {
                         child: IconButton(
                           icon: Icon(Icons.send),
                           onPressed: () {
-                            if (controller.currentUser != null) {
+                            if (getComentariosStore.currentUser != null) {
                               return enviarComentarioStore.enviarMensagem(
                                 sendMessageDto: SendMessageDto(
                                   texto:enviarComentarioStore.comentario.text,
-                                  user: controller.currentUser
+                                  user: getComentariosStore.currentUser
                                 ),
                               );
                             }

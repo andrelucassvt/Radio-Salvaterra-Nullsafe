@@ -5,8 +5,8 @@ abstract class GetComentariosState {}
 
 class GetComentariosInitial extends GetComentariosState {}
 
-class GetComentariosLoading extends GetComentariosState {}
+class GetComentariosGoogleLoading extends GetComentariosState {}
 
-class GetComentariosSucess extends GetComentariosState {}
+class GetComentariosLoginGoogleSucess extends GetComentariosState {}
 
-class GetComentariosFailure extends GetComentariosState {}
+class GetComentariosLoginGoogleError extends GetComentariosState {}
