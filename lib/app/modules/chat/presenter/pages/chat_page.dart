@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
