@@ -43,8 +43,8 @@ android {
         applicationId "com.andre.radiosalvaterrafm"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 27
-        versionName "2.1.8"
+        versionCode 29
+        versionName "2.1.9"
     }
 
    signingConfigs {

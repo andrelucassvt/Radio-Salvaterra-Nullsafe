@@ -10,20 +10,30 @@ class NewsPaperPage extends StatefulWidget {
 
 class _NewsPaperPageState extends State<NewsPaperPage> {
   final flutterWebViewPlugin = FlutterWebviewPlugin();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double loadingValue = 0.0;
-  AdWidget adWidget;
-  final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3652623512305285/8485046406',
-    size: AdSize.banner,
-    request: AdRequest(),
-    listener: BannerAdListener(),
-  );
+  InterstitialAd _interstitialAd;
+  _carregarAd(){
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-3652623512305285/1073212828',
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          setState(() {
+            this._interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ));
+  }
   @override
   void initState() {
     super.initState();
-    myBanner.load();
-    adWidget = AdWidget(ad: myBanner);
+    _carregarAd();
+    Future.delayed(Duration(seconds: 30),(){
+     _interstitialAd.show();
+    });
     flutterWebViewPlugin.onProgressChanged.listen((event) { 
       setState(() {
         loadingValue = event;
@@ -32,7 +42,6 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
   }
   @override
   void dispose() {
-    myBanner.dispose();
     flutterWebViewPlugin.close();
     super.dispose();
   }
@@ -40,21 +49,12 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
   Widget build(BuildContext context) {
     return WebviewScaffold(
       key: widget.key,
-      url: 'https://noticiamarajo.com.br/ultimas-noticias/',
+      url: 'https://extradopara.com/category/salvaterra/',
       withZoom: true,
       withLocalStorage: true,
       mediaPlaybackRequiresUserGesture: false,
       debuggingEnabled: false,
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          alignment: Alignment.center,
-          child: adWidget,
-          width: myBanner.size.width.toDouble(),
-          height: myBanner.size.height.toDouble(),
-        )
-      ),
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.red,
         title: Text(
@@ -73,7 +73,7 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(10.0),
           child: LinearProgressIndicator(
             value: loadingValue
           ),

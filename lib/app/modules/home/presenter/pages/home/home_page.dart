@@ -149,5 +149,5 @@ class _HomePageState extends State<HomePage> {
           print('InterstitialAd failed to load: $error');
         },
       ));
-    }
+  }
 }
