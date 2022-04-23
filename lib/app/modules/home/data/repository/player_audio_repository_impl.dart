@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:radiosalvaterrafm/app/modules/home/domain/datasource/player_radio_datasource.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/error/player_audio_error.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/repository/player_audio_repository.dart';
-import 'package:radiosalvaterrafm/app/modules/home/infra/datasource/player_radio_datasource.dart';
 
 class PlayerAudioRepositoryImpl implements PlayerAudiorRepository{
 

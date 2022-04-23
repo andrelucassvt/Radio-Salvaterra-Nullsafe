@@ -31,7 +31,7 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
   void initState() {
     super.initState();
     _carregarAd();
-    Future.delayed(Duration(seconds: 30),(){
+    Future.delayed(Duration(seconds: 60),(){
      _interstitialAd.show();
     });
     flutterWebViewPlugin.onProgressChanged.listen((event) { 

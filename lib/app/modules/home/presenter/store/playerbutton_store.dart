@@ -1,6 +1,4 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/error/player_audio_error.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_audio.dart';
 
