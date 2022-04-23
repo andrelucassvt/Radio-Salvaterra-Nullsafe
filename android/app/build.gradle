@@ -36,6 +36,10 @@ android {
 
     compileSdkVersion 31
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -45,8 +49,8 @@ android {
         applicationId "com.andre.radiosalvaterrafm"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 29
-        versionName "2.1.9"
+        versionCode 31
+        versionName "2.10.0"
     }
 
    signingConfigs {
@@ -72,6 +76,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
 }

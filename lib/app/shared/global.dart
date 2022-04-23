@@ -5,9 +5,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 class HelperGlobal {
   static const Color white = const Color(0xffffffff);
   static const streamUrl =
-      "https://s17.maxcast.com.br:8150/live";
+      "https://s17.maxcast.com.br:8680/live";
 
-  static const String atualizacao = '6';
 
   static Future<double> version() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

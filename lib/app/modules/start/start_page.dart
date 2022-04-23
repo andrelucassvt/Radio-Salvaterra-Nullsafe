@@ -8,7 +8,7 @@ class StartPage extends StatefulWidget {
   StartPageState createState() => StartPageState();
 }
 class StartPageState extends State<StartPage> with TickerProviderStateMixin {
-  List<Widget> _pages = [HomeModule(), ChatModule(),NewsPaperPage()];
+  List<Widget> _pages = [HomeModule(), ChatModule()];
   var _tabs = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
@@ -17,10 +17,6 @@ class StartPageState extends State<StartPage> with TickerProviderStateMixin {
     BottomNavigationBarItem(
       icon: Icon(Icons.message),
       label: 'Chat',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.article),
-      label: 'News',
     ),
   ];
   int _currentIndex = 0;
