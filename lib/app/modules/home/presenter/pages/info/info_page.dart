@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 class InfoPage extends StatefulWidget {
   @override
   _InfoPageState createState() => _InfoPageState();
@@ -14,12 +15,12 @@ class _InfoPageState extends State<InfoPage> {
   );
   AdWidget adWidget;
   @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      myBanner.load();
-      adWidget = AdWidget(ad: myBanner);
-    }
+  void initState() {
+    super.initState();
+    myBanner.load();
+    adWidget = AdWidget(ad: myBanner);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +29,10 @@ class _InfoPageState extends State<InfoPage> {
         centerTitle: true,
         backgroundColor: Colors.red,
         leading: IconButton(
-          iconSize: 32,
-          icon: Icon(Icons.keyboard_arrow_down),
-          onPressed: ()=>Navigator.of(context).pop()),
+            iconSize: 32,
+            icon: Icon(Icons.keyboard_arrow_down),
+            onPressed: () => Navigator.of(context).pop()),
       ),
-
       body: ListView(
         children: <Widget>[
           Container(
@@ -43,11 +43,16 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text('Segunda a Sexta',style: TextStyle(fontSize: 20),)),
+            child: Center(
+                child: Text(
+              'Segunda a Sexta',
+              style: TextStyle(fontSize: 20),
+            )),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('05:00 às 07:00 - Bom dia Salvaterra(Toninho Carrasco)'),
+            child:
+                Text('05:00 às 07:00 - Bom dia Salvaterra(Toninho Carrasco)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -63,7 +68,8 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('15:00 às 17:00 - Super Tarde Salvaterra(Efrain do Marajó)'),
+            child: Text(
+                '15:00 às 17:00 - Super Tarde Salvaterra(Efrain do Marajó)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -71,11 +77,13 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('18:00 às 20:00 - Ritmo das aparelhagens(Thiago Nunes e Dj Pedrinho Pressão)'),
+            child: Text(
+                '18:00 às 20:00 - Ritmo das aparelhagens(Thiago Nunes e Dj Pedrinho Pressão)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('20:00 às 22:00 - Expresso da saudade(Toninho Carrasco)'),
+            child:
+                Text('20:00 às 22:00 - Expresso da saudade(Toninho Carrasco)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -83,7 +91,11 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text('Sábado',style: TextStyle(fontSize: 20),)),
+            child: Center(
+                child: Text(
+              'Sábado',
+              style: TextStyle(fontSize: 20),
+            )),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -95,7 +107,8 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('10:00 às 12:00 - Sabadão Show(Dj júnior e Dj Bruno Silva)'),
+            child: Text(
+                '10:00 às 12:00 - Sabadão Show(Dj júnior e Dj Bruno Silva)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -111,18 +124,22 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('18:00 às 20:00 - No ritmo das aparelhagens(Thiago Nunes e Dj Pedrinho Pressão)'),
+            child: Text(
+                '18:00 às 20:00 - No ritmo das aparelhagens(Thiago Nunes e Dj Pedrinho Pressão)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('20:00 às 22:00 - Expresso da saudade(Toninho Carrasco)'),
+            child:
+                Text('20:00 às 22:00 - Expresso da saudade(Toninho Carrasco)'),
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text('Domingo',style: TextStyle(fontSize: 20),)),
+            child: Center(
+                child: Text(
+              'Domingo',
+              style: TextStyle(fontSize: 20),
+            )),
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text('06:00 às 08:00 - Clube do rei(Musical)'),
@@ -133,7 +150,8 @@ class _InfoPageState extends State<InfoPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('10:00 às 13:00 - Domingo Swing e alegria(Marcelo Nunes)'),
+            child:
+                Text('10:00 às 13:00 - Domingo Swing e alegria(Marcelo Nunes)'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/repository/chat_repository.dart';
 

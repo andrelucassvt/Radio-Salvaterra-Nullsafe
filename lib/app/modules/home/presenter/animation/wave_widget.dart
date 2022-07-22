@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'dart:math' as Math;
+
+import 'package:flutter/material.dart';
 
 class ClipperWidget extends CustomClipper<Path> {
   final List<Offset> waveList;
@@ -19,8 +19,6 @@ class ClipperWidget extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper oldClipper) => true;
 }
-
-
 
 class WaveWidget extends StatefulWidget {
   final Size size;
