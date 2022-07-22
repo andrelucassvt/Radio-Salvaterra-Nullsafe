@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pegarAtt();
     _carregarAd();
-    Future.delayed(Duration(seconds: 15),(){
+    Future.delayed(Duration(seconds: 30),(){
      _interstitialAd.show();
     });
     playerButtonCubit.addListener(() { 
