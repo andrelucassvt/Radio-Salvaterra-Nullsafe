@@ -7,7 +7,7 @@ import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_en
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/enviar_comentario/enviarcomentario_store.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/get_comentarios/get_comentarios_store.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/widgets/comentarios.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -15,7 +15,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-
   final enviarComentarioStore = Modular.get<EnviarcomentarioStore>();
   final getComentariosStore = Modular.get<GetComentariosStore>();
 
@@ -25,7 +24,7 @@ class _ChatPageState extends State<ChatPage> {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       getComentariosStore.setUser(user);
     });
-    enviarComentarioStore.addListener(() { 
+    enviarComentarioStore.addListener(() {
       final value = enviarComentarioStore.value;
       if (value is EnviarcomentarioSucess) {
         return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -62,7 +61,8 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Share.share('''Baixe agora o aplicativo da Salvaterra FM.\nhttps://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm''');
+              Share.share(
+                  '''Baixe agora o aplicativo da Salvaterra FM.\nhttps://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm''');
             },
             icon: Icon(Icons.share),
           )
@@ -73,40 +73,38 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              child: ValueListenableBuilder<GetComentariosState>(
-                valueListenable: getComentariosStore,
-                builder: (context,value,child) {
+                child: ValueListenableBuilder<GetComentariosState>(
+              valueListenable: getComentariosStore,
+              builder: (context, value, child) {
+                if (value is GetComentariosGoogleLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                  if (value is GetComentariosGoogleLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                if (value is GetComentariosLoginGoogleError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Faça login com o google para ter acesso ao chat'),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          child: Text('Login com google'),
+                          onPressed: () =>
+                              getComentariosStore.loginGoogle(context),
+                        )
+                      ],
+                    ),
+                  );
+                }
 
-                  if (value is GetComentariosLoginGoogleError) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Faça login com o google para ter acesso ao chat'),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                            child: Text('Login com google'),
-                            onPressed: () => getComentariosStore.loginGoogle(context),
-                          )
-                        ],
-                      ),
-                    );
-                  }
-
-                  if (value is GetComentariosLoginGoogleSucess) {
-
-                    return StreamBuilder<List<ComentarioEntity>>(
+                if (value is GetComentariosLoginGoogleSucess) {
+                  return StreamBuilder<List<ComentarioEntity>>(
                       stream: getComentariosStore.getComentariosUsecases(),
                       builder: (context, snapshot) {
-
                         if (!snapshot.hasData) {
                           return Center(
                             child: CircularProgressIndicator(),
@@ -125,43 +123,40 @@ class _ChatPageState extends State<ChatPage> {
                             );
                           },
                         );
-                      }
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
-              )
-            ),
+                      });
+                }
+                return SizedBox.shrink();
+              },
+            )),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      focusNode: enviarComentarioStore.node,
-                      controller: enviarComentarioStore.comentario,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        hintText: 'Enviar uma mensagem',
+                      child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    focusNode: enviarComentarioStore.node,
+                    controller: enviarComentarioStore.comentario,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Campo vazio!!";
-                        }
-                        return '';
-                      },
-                    )
-                  ),
+                      hintText: 'Enviar uma mensagem',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Campo vazio!!";
+                      }
+                      return '';
+                    },
+                  )),
                   SizedBox(
                     width: 10,
                   ),
                   ValueListenableBuilder<EnviarcomentarioState>(
                     valueListenable: enviarComentarioStore,
-                    builder: (context, value ,child) {
+                    builder: (context, value, child) {
                       return Container(
                         decoration: BoxDecoration(
                           color: Colors.blue,
@@ -173,13 +168,14 @@ class _ChatPageState extends State<ChatPage> {
                             if (getComentariosStore.currentUser != null) {
                               return enviarComentarioStore.enviarMensagem(
                                 sendMessageDto: SendMessageDto(
-                                  texto:enviarComentarioStore.comentario.text,
-                                  user: getComentariosStore.currentUser
-                                ),
+                                    texto:
+                                        enviarComentarioStore.comentario.text,
+                                    user: getComentariosStore.currentUser),
                               );
                             }
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('Faça login com o google para enviar uma mensagem'),
+                              content: Text(
+                                  'Faça login com o google para enviar uma mensagem'),
                               backgroundColor: Colors.red,
                             ));
                           },
