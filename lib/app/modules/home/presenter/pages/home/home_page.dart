@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/animation/wave_widget.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
@@ -16,17 +15,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  InterstitialAd _interstitialAd;
   final playerButtonCubit = Modular.get<PlayerbuttonStore>();
-
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-3652623512305285/8485046406',
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
+  AdWidget adWidget;
   @override
   void initState() {
     super.initState();
     _pegarAtt();
-    _carregarAd();
-    Future.delayed(Duration(seconds: 30), () {
-      _interstitialAd.show();
-    });
+    myBanner.load();
+    adWidget = AdWidget(ad: myBanner);
     playerButtonCubit.addListener(() {
       final value = playerButtonCubit.value;
       if (value is PlayerbuttonLoading) {
@@ -47,12 +49,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    final bool keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Colors.red,
+        //backgroundColor: Colors.red,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showCupertinoModalPopup(
@@ -63,33 +63,32 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.green,
           child: Icon(Icons.info),
         ),
-        body: Stack(
-          children: [
-            Container(
-              height: size.height - 200,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                Colors.red,
-                Colors.yellow,
-              ])),
-            ),
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOutQuad,
-              top: keyboardOpen ? -size.height / 3.7 : 0.0,
-              child: WaveWidget(
-                size: size,
-                yOffset: size.height / 2.2,
-                color: HelperGlobal.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 60),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Colors.red,
+                  Colors.yellow,
+                ])),
+                child: Image.asset('Imagens/Salvaterra.png'),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 25),
-              child: Image.asset('Imagens/Salvaterra.png'),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
+              SizedBox(
+                height: 170,
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: adWidget,
+                width: myBanner.size.width.toDouble(),
+                height: myBanner.size.height.toDouble(),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
                 padding: const EdgeInsets.only(bottom: 100),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -111,8 +110,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -129,21 +128,5 @@ class _HomePageState extends State<HomePage> {
             context: context, builder: (x) => AtualizarApp());
       });
     }
-  }
-
-  _carregarAd() {
-    InterstitialAd.load(
-        adUnitId: 'ca-app-pub-3652623512305285/1543293215',
-        request: AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            setState(() {
-              this._interstitialAd = ad;
-            });
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
-          },
-        ));
   }
 }
