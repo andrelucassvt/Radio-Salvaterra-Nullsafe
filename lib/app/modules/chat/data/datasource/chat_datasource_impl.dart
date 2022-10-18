@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/data/mappers/comentario_mapper.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/domain/datasource/chat_datasource.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/external/mappers/comentario_mapper.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/infra/datasource/chat_datasource.dart';
 
 class ChatDatasourceImpl implements ChatDatasource{
 

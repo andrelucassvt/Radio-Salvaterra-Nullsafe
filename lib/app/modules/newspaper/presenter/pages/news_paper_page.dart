@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -31,7 +31,7 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
   void initState() {
     super.initState();
     _carregarAd();
-    Future.delayed(Duration(seconds: 30),(){
+    Future.delayed(Duration(seconds: 60),(){
      _interstitialAd.show();
     });
     flutterWebViewPlugin.onProgressChanged.listen((event) { 
@@ -49,7 +49,7 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
   Widget build(BuildContext context) {
     return WebviewScaffold(
       key: widget.key,
-      url: 'https://extradopara.com/category/salvaterra/',
+      url: 'https://g1.globo.com/pa/para/e-do-para/',
       withZoom: true,
       withLocalStorage: true,
       mediaPlaybackRequiresUserGesture: false,
@@ -81,4 +81,4 @@ class _NewsPaperPageState extends State<NewsPaperPage> {
       ),
     );
   }
-}
+} */

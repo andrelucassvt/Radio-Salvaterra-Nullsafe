@@ -1,16 +1,14 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/usecases/get_comentarios_usecases.dart';
 
 part 'get_comentarios_state.dart';
 
 class GetComentariosStore extends ValueNotifier<GetComentariosState> {
-
   final GetComentariosUsecases getComentariosUsecases;
-  GetComentariosStore(this.getComentariosUsecases) : super(GetComentariosInitial());
+  GetComentariosStore(this.getComentariosUsecases)
+      : super(GetComentariosInitial());
 
   GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -34,16 +32,18 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
     }
 
     try {
-      final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
       );
 
-      var authResult = await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      var authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
       final User user = authResult.user;
       value = GetComentariosLoginGoogleSucess();
@@ -52,9 +52,8 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
       value = GetComentariosLoginGoogleError();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Não foi possivel fazer login')
-        ),
+            backgroundColor: Colors.red,
+            content: Text('Não foi possivel fazer login')),
       );
     }
   }

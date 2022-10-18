@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/data/datasource/chat_datasource_impl.dart';
+import 'package:radiosalvaterrafm/app/modules/chat/data/repository/chat_repository_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/usecases/enviar_mensagem_usecases.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/usecases/get_comentarios_usecases.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/external/datasource/chat_datasource_impl.dart';
-import 'package:radiosalvaterrafm/app/modules/chat/infra/repository/chat_repository_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/pages/chat_page.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/enviar_comentario/enviarcomentario_store.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/get_comentarios/get_comentarios_store.dart';

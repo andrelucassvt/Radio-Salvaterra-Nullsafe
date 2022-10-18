@@ -1,10 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
+import 'package:radiosalvaterrafm/app/modules/home/data/datasource/player_radio_datasource_impl.dart';
+import 'package:radiosalvaterrafm/app/modules/home/data/repository/player_audio_repository_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/usecases/get_player_audio.dart';
-import 'package:radiosalvaterrafm/app/modules/home/external/datasource/player_radio_datasource_impl.dart';
-import 'package:radiosalvaterrafm/app/modules/home/infra/repository/player_audio_repository_impl.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/home/home_page.dart';
 
