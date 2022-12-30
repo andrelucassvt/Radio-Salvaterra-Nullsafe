@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final playerButtonCubit = Modular.get<PlayerbuttonStore>();
   final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3652623512305285/8485046406',
+    adUnitId: Platform.isAndroid
+        ? 'ca-app-pub-3652623512305285/8485046406'
+        : 'ca-app-pub-3652623512305285/8125489410',
     size: AdSize.banner,
     request: AdRequest(),
     listener: BannerAdListener(),
