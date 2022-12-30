@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,8 +54,10 @@ class _AtualizarAppState extends State<AtualizarApp> {
   }
 
   abrirUrl() async {
-    const url =
-        'https://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm';
+    final url = Platform.isAndroid
+        ? 'https://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm'
+        : 'https://apps.apple.com/us/app/salvaterra-fm/id6443883925';
+
     if (await canLaunch(url)) {
       await launch(url);
       Navigator.of(context).pop();

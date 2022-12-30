@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +64,7 @@ class _ChatPageState extends State<ChatPage> {
           IconButton(
             onPressed: () {
               Share.share(
-                  '''Baixe agora o aplicativo da Salvaterra FM.\nhttps://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm''');
+                  '''Baixe agora o aplicativo da Salvaterra FM.\nAndroid: https://play.google.com/store/apps/details?id=com.andre.radiosalvaterrafm\nIOS: https://apps.apple.com/us/app/salvaterra-fm/id6443883925''');
             },
             icon: Icon(Icons.share),
           )
@@ -83,22 +85,7 @@ class _ChatPageState extends State<ChatPage> {
                 }
 
                 if (value is GetComentariosLoginGoogleError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Faça login com o google para ter acesso ao chat'),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          child: Text('Login com google'),
-                          onPressed: () =>
-                              getComentariosStore.loginGoogle(context),
-                        )
-                      ],
-                    ),
-                  );
+                  return _loginPlatform();
                 }
 
                 if (value is GetComentariosLoginGoogleSucess) {
@@ -188,6 +175,41 @@ class _ChatPageState extends State<ChatPage> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _loginPlatform() {
+    if (Platform.isIOS) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Faça login com à Apple para ter acesso ao chat'),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              child: Text('Login com à Apple'),
+              onPressed: () => getComentariosStore.loginApple(context),
+            )
+          ],
+        ),
+      );
+    }
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Faça login com o google para ter acesso ao chat'),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            child: Text('Login com google'),
+            onPressed: () => getComentariosStore.loginGoogle(context),
+          )
+        ],
       ),
     );
   }
