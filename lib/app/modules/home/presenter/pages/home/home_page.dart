@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/widgets/button_player.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
@@ -57,26 +56,29 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async => false,
       child: Scaffold(
         //backgroundColor: Colors.red,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showCupertinoModalPopup(
-              context: context,
-              builder: (x) => InfoPage(),
-            );
-          },
-          backgroundColor: Colors.green,
-          child: Icon(Icons.info),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     showCupertinoModalPopup(
+        //       context: context,
+        //       builder: (x) => InfoPage(),
+        //     );
+        //   },
+        //   backgroundColor: Colors.green,
+        //   child: Icon(Icons.info),
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Container(
                 padding: EdgeInsets.symmetric(vertical: 60),
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Colors.red,
-                  Colors.yellow,
-                ])),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.red,
+                      Colors.yellow,
+                    ],
+                  ),
+                ),
                 child: Image.asset('Imagens/Salvaterra.png'),
               ),
               SizedBox(
