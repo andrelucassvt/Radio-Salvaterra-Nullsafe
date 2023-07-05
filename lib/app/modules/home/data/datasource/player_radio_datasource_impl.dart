@@ -1,27 +1,26 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:radiosalvaterrafm/app/modules/home/domain/datasource/player_radio_datasource.dart';
 import 'package:radiosalvaterrafm/app/shared/global.dart';
 
-@Injectable(singleton: true)
 class PlayerAudioDatasourceImpl implements PlayerAudioDatasource {
   final AudioPlayer player;
   PlayerAudioDatasourceImpl(this.player);
 
   @override
-  Future<void> playerAudio() {
-    if (player.state == PlayerState.STOPPED || player.state == PlayerState.PAUSED) {
-      player.setUrl(HelperGlobal.streamUrl);
+  Future<void> playerAudio() async {
+    if (player.state == PlayerState.stopped ||
+        player.state == PlayerState.paused) {
+      player.setSource(UrlSource(HelperGlobal.streamUrl));
       return player.resume();
     }
-    if (player.state == PlayerState.PLAYING) {
+    if (player.state == PlayerState.playing) {
       return player.stop();
     }
   }
 
   @override
-  Future<void> pauseAudio() {
-    if(player.state == PlayerState.PLAYING){
+  Future<void> pauseAudio() async {
+    if (player.state == PlayerState.playing) {
       return player.stop();
     }
   }

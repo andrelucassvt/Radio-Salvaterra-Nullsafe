@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ClipperWidget extends CustomClipper<Path> {
   final List<Offset> waveList;
-  ClipperWidget({@required this.waveList});
+  ClipperWidget({required this.waveList});
 
   @override
   getClip(Size size) {
@@ -26,9 +26,9 @@ class WaveWidget extends StatefulWidget {
   final Color color;
 
   WaveWidget({
-    @required this.size,
-    @required this.yOffset,
-    @required this.color,
+    required this.size,
+    required this.yOffset,
+    required this.color,
   });
 
   @override
@@ -36,7 +36,7 @@ class WaveWidget extends StatefulWidget {
 }
 
 class _WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
-  AnimationController animationController;
+  late AnimationController animationController;
   List<Offset> wavePoints = [];
 
   @override

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get_it/get_it.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/dto/send_message_dto.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/presenter/stores/enviar_comentario/enviarcomentario_store.dart';
@@ -17,8 +17,8 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final enviarComentarioStore = Modular.get<EnviarcomentarioStore>();
-  final getComentariosStore = Modular.get<GetComentariosStore>();
+  final enviarComentarioStore = GetIt.instance.get<EnviarcomentarioStore>();
+  final getComentariosStore = GetIt.instance.get<GetComentariosStore>();
 
   @override
   void initState() {
@@ -29,13 +29,13 @@ class _ChatPageState extends State<ChatPage> {
     enviarComentarioStore.addListener(() {
       final value = enviarComentarioStore.value;
       if (value is EnviarcomentarioSucess) {
-        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Comentario enviado com sucesso'),
           backgroundColor: Colors.blue,
         ));
       }
       if (value is EnviarcomentarioFailure) {
-        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value.error.message),
           backgroundColor: Colors.red,
         ));
@@ -98,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
                           );
                         }
 
-                        List<ComentarioEntity> list = snapshot.data;
+                        List<ComentarioEntity> list = snapshot.data!;
 
                         return ListView.builder(
                           itemCount: list.length,
@@ -132,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                       hintText: 'Enviar uma mensagem',
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return "Campo vazio!!";
                       }
                       return '';
@@ -152,19 +152,12 @@ class _ChatPageState extends State<ChatPage> {
                         child: IconButton(
                           icon: Icon(Icons.send),
                           onPressed: () {
-                            if (getComentariosStore.currentUser != null) {
-                              return enviarComentarioStore.enviarMensagem(
-                                sendMessageDto: SendMessageDto(
-                                    texto:
-                                        enviarComentarioStore.comentario.text,
-                                    user: getComentariosStore.currentUser),
-                              );
-                            }
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  'Faça login com o google para enviar uma mensagem'),
-                              backgroundColor: Colors.red,
-                            ));
+                            enviarComentarioStore.enviarMensagem(
+                              sendMessageDto: SendMessageDto(
+                                texto: enviarComentarioStore.comentario.text,
+                                user: getComentariosStore.currentUser!,
+                              ),
+                            );
                           },
                         ),
                       );

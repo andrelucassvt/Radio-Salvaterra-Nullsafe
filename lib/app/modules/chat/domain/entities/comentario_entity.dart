@@ -1,8 +1,8 @@
 class ComentarioEntity {
-  String id;
-  String nome;
-  String perfil;
-  String message;
+  final String? id;
+  final String? nome;
+  final String? perfil;
+  final String? message;
 
   ComentarioEntity({
     this.id,

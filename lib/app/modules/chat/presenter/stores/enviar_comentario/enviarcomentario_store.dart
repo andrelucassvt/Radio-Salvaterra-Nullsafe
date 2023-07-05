@@ -14,7 +14,7 @@ class EnviarcomentarioStore extends ValueNotifier<EnviarcomentarioState> {
   GlobalKey<FormState> validacao = GlobalKey<FormState>();
   FocusNode node = FocusNode();
 
-  Future<void> enviarMensagem({@required SendMessageDto sendMessageDto}) async {
+  Future<void> enviarMensagem({required SendMessageDto sendMessageDto}) async {
     var result = await enviarComentarioUsecases(sendMessageDto);
     comentario.clear();
     node.unfocus();

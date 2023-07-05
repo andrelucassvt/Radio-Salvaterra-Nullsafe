@@ -13,7 +13,7 @@ class _InfoPageState extends State<InfoPage> {
     request: AdRequest(),
     listener: BannerAdListener(),
   );
-  AdWidget adWidget;
+  late AdWidget adWidget;
   @override
   void initState() {
     super.initState();

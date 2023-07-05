@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/pages/info/info_page.dart';
 import 'package:radiosalvaterrafm/app/modules/home/presenter/store/playerbutton_store.dart';
@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final playerButtonCubit = Modular.get<PlayerbuttonStore>();
+  final playerButtonCubit = GetIt.instance.get<PlayerbuttonStore>();
   final BannerAd myBanner = BannerAd(
     adUnitId: Platform.isAndroid
         ? 'ca-app-pub-3652623512305285/8485046406'
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     request: AdRequest(),
     listener: BannerAdListener(),
   );
-  AdWidget adWidget;
+  late AdWidget adWidget;
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     playerButtonCubit.addListener(() {
       final value = playerButtonCubit.value;
       if (value is PlayerbuttonLoading) {
-        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Conectando ao servidor"),
           duration: Duration(seconds: 5),
           backgroundColor: Colors.blue,
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
     double codeBuilder = await HelperGlobal.version();
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('status').doc('att').get();
-    Map<String, dynamic> data = snapshot.data();
+    Map<String, dynamic> data = snapshot.data() ?? {};
     if (data['build'] > codeBuilder) {
       Future.delayed(Duration.zero, () {
         showCupertinoModalPopup(

@@ -13,9 +13,9 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
 
   GoogleSignIn googleSignIn = GoogleSignIn();
 
-  User currentUser;
+  User? currentUser;
 
-  void setUser(User user) {
+  void setUser(User? user) {
     value = GetComentariosGoogleLoading();
     if (user != null) {
       value = GetComentariosLoginGoogleSucess();
@@ -29,7 +29,7 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
   Future<User> loginApple(BuildContext context) async {
     if (currentUser != null) {
       value = GetComentariosLoginGoogleSucess();
-      return currentUser;
+      return currentUser!;
     }
 
     try {
@@ -44,7 +44,7 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
       );
       final authResult =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      final User user = authResult.user;
+      final User user = authResult.user!;
       value = GetComentariosLoginGoogleSucess();
       return user;
     } catch (e) {
@@ -54,20 +54,21 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
             backgroundColor: Colors.red,
             content: Text('Não foi possivel fazer login')),
       );
+      rethrow;
     }
   }
 
   Future<User> loginGoogle(BuildContext context) async {
     if (currentUser != null) {
       value = GetComentariosLoginGoogleSucess();
-      return currentUser;
+      return currentUser!;
     }
 
     try {
-      final GoogleSignInAccount googleSignInAccount =
+      final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+          await googleSignInAccount!.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
@@ -77,7 +78,7 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
       var authResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      final User user = authResult.user;
+      final User user = authResult.user!;
       value = GetComentariosLoginGoogleSucess();
       return user;
     } catch (error) {
@@ -87,6 +88,7 @@ class GetComentariosStore extends ValueNotifier<GetComentariosState> {
             backgroundColor: Colors.red,
             content: Text('Não foi possivel fazer login')),
       );
+      rethrow;
     }
   }
 }

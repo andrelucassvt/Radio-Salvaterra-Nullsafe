@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SendMessageDto {
-  String texto;
-  User user;
+  final String texto;
+  final User user;
 
   SendMessageDto({
-    this.texto,
-    this.user,
+    required this.texto,
+    required this.user,
   });
-  
 }

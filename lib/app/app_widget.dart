@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:radiosalvaterrafm/app/modules/start/start_page.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -7,6 +7,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-    ).modular();
+      home: StartPage(),
+    );
   }
 }

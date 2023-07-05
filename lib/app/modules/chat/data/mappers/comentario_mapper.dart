@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:radiosalvaterrafm/app/modules/chat/domain/entities/comentario_entity.dart';
 
 class ComentarioMapper extends ComentarioEntity {
-  
-  String id;
-  String nome;
-  String perfil;
-  String message;
-  
+  final String? id;
+  final String? nome;
+  final String? perfil;
+  final String? message;
+
   ComentarioMapper({
     this.id,
     this.nome,
@@ -33,9 +32,9 @@ class ComentarioMapper extends ComentarioEntity {
     );
   }
 
-  static List<ComentarioMapper> fromJsonList(List list){
+  static List<ComentarioMapper> fromJsonList(List list) {
     if (list == null) {
-      return null;
+      return [];
     }
     return list.map((e) => ComentarioMapper.fromMap(e)).toList();
   }
